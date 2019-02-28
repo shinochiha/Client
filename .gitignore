@@ -113,7 +113,7 @@ $RECYCLE.BIN/
 lib/
 data/
 
-# builded frontend
-public
+# server and client build
+server
 
 package-lock.json
