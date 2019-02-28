@@ -9,8 +9,8 @@
   "private": true,
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts server/public",
-    "serve": "serve -s server/public",
+    "build": "react-scripts build && mv build ../server/public",
+    "serve": "serve -s ../server/public",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
