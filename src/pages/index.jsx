@@ -69,13 +69,15 @@ class Index extends React.Component {
   };
 
   handleCheckboxChange = name => event => {
-    this.setState({ 
+    this.setState({
       [name]: event.target.checked,
     });
   };
 
   state = {
     activeStep: 0,
+    isError: false,
+    errorMessage: '',
     email: '',
     password: '',
     accessToken: '',
@@ -144,7 +146,7 @@ class Index extends React.Component {
   };
 
   steps = [
-    'Login', 
+    'Login',
     'Pilih data perusahaan',
     'Pilih data yang akan diimpor',
     'Status',
@@ -176,14 +178,14 @@ class Index extends React.Component {
     if (this.state.activeStep===0) {
       return (
         <Button
-          variant="contained" 
-          color="primary" 
+          variant="contained"
+          color="primary"
           onClick={this.handleNext}>Lanjutkan
         </Button>
       )
     } else if (this.state.activeStep===this.steps.length) {
       return (
-        <Button 
+        <Button
           variant="contained"
           onClick={this.handleReset}>Reset
         </Button>
@@ -192,13 +194,13 @@ class Index extends React.Component {
       return (
         <div>
           <Button
-            variant="contained" 
+            variant="contained"
             onClick={this.handleBack}
             className={classes.backButton}>Kembali
           </Button>
           <Button
-            variant="contained" 
-            color="primary" 
+            variant="contained"
+            color="primary"
             onClick={this.handleNext}>{this.state.activeStep === this.steps.length - 1 ? 'Proses' : 'Lanjutkan'}
           </Button>
         </div>
@@ -310,18 +312,18 @@ class Index extends React.Component {
             <FormGroup>
             <FormControlLabel
               control={
-                <Checkbox 
-                  checked={this.state.accounts} 
-                  onChange={this.handleCheckboxChange('accounts')} 
+                <Checkbox
+                  checked={this.state.accounts}
+                  onChange={this.handleCheckboxChange('accounts')}
                   value="accounts" />
               }
               label="Akun"
             />
             <FormControlLabel
               control={
-                <Checkbox 
-                  checked={this.state.contacts} 
-                  onChange={this.handleCheckboxChange('contacts')} 
+                <Checkbox
+                  checked={this.state.contacts}
+                  onChange={this.handleCheckboxChange('contacts')}
                   value="contacts" />
               }
               label="Kontak"
@@ -351,18 +353,18 @@ class Index extends React.Component {
             <FormLabel>Data-data</FormLabel>
             <FormControlLabel
               control={
-                <Checkbox 
-                  checked={this.state.departments} 
-                  onChange={this.handleCheckboxChange('departments')} 
+                <Checkbox
+                  checked={this.state.departments}
+                  onChange={this.handleCheckboxChange('departments')}
                   value="departments" />
               }
               label="Departemen"
             />
             <FormControlLabel
               control={
-                <Checkbox 
-                  checked={this.state.projects} 
-                  onChange={this.handleCheckboxChange('projects')} 
+                <Checkbox
+                  checked={this.state.projects}
+                  onChange={this.handleCheckboxChange('projects')}
                   value="projects" />
               }
               label="Proyek"
@@ -395,18 +397,18 @@ class Index extends React.Component {
             <FormLabel>Saldo Awal</FormLabel>
             <FormControlLabel
               control={
-                <Checkbox 
-                  checked={this.state.accountBeginningBalances} 
-                  onChange={this.handleCheckboxChange('accountBeginningBalances')} 
+                <Checkbox
+                  checked={this.state.accountBeginningBalances}
+                  onChange={this.handleCheckboxChange('accountBeginningBalances')}
                   value="accountBeginningBalances" />
               }
               label="Akun"
             />
             <FormControlLabel
               control={
-                <Checkbox 
-                  checked={this.state.receivableBeginningBalances} 
-                  onChange={this.handleCheckboxChange('receivableBeginningBalances')} 
+                <Checkbox
+                  checked={this.state.receivableBeginningBalances}
+                  onChange={this.handleCheckboxChange('receivableBeginningBalances')}
                   value="receivableBeginningBalances" />
               }
               label="Piutang"
@@ -443,6 +445,7 @@ class Index extends React.Component {
 
   render() {
     const { classes } = this.props;
+    console.log(this.props.url)
     // console.log(Validation({attribute: 'tes', value: '', validation: 'required|email'}));
 
     return (
@@ -459,7 +462,7 @@ class Index extends React.Component {
             {this.state.email}
             <Typography className={classes.instructions}>{this.handleStepContent(classes)}</Typography>
           </CardContent>
-          
+
         </Card>
         <div>
         </div>

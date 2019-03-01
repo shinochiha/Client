@@ -76,23 +76,29 @@ class Login extends React.Component {
       }
     }
     if (!this.state.isError) {
-      this.props.handler({name: 'activeStep', value: 1});
-    } else {
-      axios.post(process.env.REACT_APP_ZAHIR_ID_URL+'/oauth/access_token', {
-          grant_type: 'password',
-          client_id: process.env.REACT_APP_ZAHIR_ID_CLIENT_ID,
-          client_secret: process.env.REACT_APP_ZAHIR_ID_CLIENT_SECRET,
-          username: this.props.state.email,
-          password: this.props.state.password,
+      let token = btoa(this.props.state.email+':'+this.props.state.password)
+      let state = this.state
+      let props = this.props
+      const setState = this.setState.bind(this)
+      axios.post('/auth', {}, {
+          headers: {'Authorization': 'Basic '+ token}
         })
         .then(function (response) {
-          console.log(response);
+          console.log(response)
+          props.handler({name: 'activeStep', value: 1});
         })
         .catch(function (error) {
-          console.log(error);
-        })
-        .then(function () {
-          // always executed
+          if (error.response.status===401) {
+            let emailState = {...state.email}
+            emailState.error = ['Invalid email/password']
+
+            let passwordState = {...state.password}
+            passwordState.error = ['Invalid email/password']
+
+            setState({isError: true, email: emailState, password: passwordState});
+          } else {
+            setState({isError: true, errorMessage: error.response});
+          }
         });
     }
   }
