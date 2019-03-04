@@ -5,7 +5,6 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
@@ -54,7 +53,7 @@ class Login extends React.Component {
     let errorMessage = this.state[name].errorMessage;
     if (errorMessage.length>0) {
       for (var i = 0; i < errorMessage.length; i++) {
-        message.push(<FormHelperText error style={{margin: '0 0 10px 0'}}>{errorMessage[i]}</FormHelperText>);
+        message.push(<FormHelperText key={i} error style={{margin: '0 0 10px 0'}}>{errorMessage[i]}</FormHelperText>);
       }
     }
     return message;
@@ -69,48 +68,38 @@ class Login extends React.Component {
   handleNext = () => {
     let keys = Object.keys(this.state);
     for (var i = 0; i < keys.length; i++) {
-      let key = keys[i];
+      let key = keys[i]
       if (typeof this.state[key].validation!=='undefined') {
-        let value = this.props.state[key];
-        this.handleValidation({name: key, value: value});
+        let value = this.props.state[key]
+        this.handleValidation({name: key, value: value})
       }
     }
     if (!this.state.isError) {
       let token = btoa(this.props.state.email+':'+this.props.state.password)
-      let state = this.state
       let props = this.props
-      const setState = this.setState.bind(this)
       axios.post('/auth', {}, {
           headers: {'Authorization': 'Basic '+ token}
         })
         .then(function (response) {
-          console.log(response)
-          props.handler({name: 'activeStep', value: 1});
+          console.log(response.data.token)
+          props.handler({name: 'activeStep', value: 1})
+          props.handler({name: 'token', value: response.data.token})
         })
         .catch(function (error) {
-          if (error.response.status===401) {
-            let emailState = {...state.email}
-            emailState.error = ['Invalid email/password']
-
-            let passwordState = {...state.password}
-            passwordState.error = ['Invalid email/password']
-
-            setState({isError: true, email: emailState, password: passwordState});
-          } else {
-            setState({isError: true, errorMessage: error.response});
-          }
+          console.log(error.response.data)
+          props.handler({name: 'isError', value: true})
+          props.handler({name: 'errorMessage', value: error.response.data.error_description})
         });
     }
   }
 
   render() {
     return (
-      <Typography>
+      <div>
         <TextField
           error={this.state.email.isError}
           name="email"
           label="Email"
-          type="email"
           variant="outlined"
           margin="normal"
           value={this.props.state.email}
@@ -139,12 +128,12 @@ class Login extends React.Component {
           fullWidth
         />
         {this.handleValidationMessage('password')}
-        <Typography style={{ width: '100%', textAlign: 'right' }}>
+        <div style={{ width: '100%', textAlign: 'right' }}>
           <Button onClick={this.handleNext} variant="contained" color='primary' style={{margin: '10px 0 0 0'}}>
             Lanjutkan
           </Button>
-        </Typography>
-      </Typography>
+        </div>
+      </div>
     );
   }
 }

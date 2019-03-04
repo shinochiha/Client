@@ -5,7 +5,6 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
@@ -88,7 +87,7 @@ class SelectCompany extends React.Component {
 
   render() {
     return (
-      <Typography>
+      <div>
 
         <TextField
           error={this.state.email.isError}
@@ -123,15 +122,15 @@ class SelectCompany extends React.Component {
           fullWidth
         />
         {this.handleValidationMessage('password')}
-        <Typography style={{ width: '100%', textAlign: 'right' }}>
+        <div style={{ width: '100%', textAlign: 'right' }}>
           <Button onClick={this.handlePrevious} variant="contained" color='default' style={{margin: '10px 10px 0 0'}}>
             Kembali
           </Button>
           <Button onClick={this.handleNext} variant="contained" color='primary' style={{margin: '10px 0 0 0'}}>
             Lanjutkan
           </Button>
-        </Typography>
-      </Typography>
+        </div>
+      </div>
     );
   }
 }

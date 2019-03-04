@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 
 import { withStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
@@ -10,20 +9,17 @@ import StepLabel from '@material-ui/core/StepLabel';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 
-
+import ErrorIcon from '@material-ui/icons/Error';
 import Button from '@material-ui/core/Button';
+import CloseIcon from "@material-ui/icons/Close";
 import IconButton from '@material-ui/core/IconButton';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import Typography from '@material-ui/core/Typography';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import Snackbar from '@material-ui/core/Snackbar';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
 
 import Login from '../components/Login'
 import SelectCompany from '../components/SelectCompany'
@@ -45,7 +41,21 @@ const styles = theme => ({
   formControl: {
     margin: theme.spacing.unit * 3,
   },
-
+  errorSnackbar: {
+    backgroundColor: theme.palette.error.dark,
+  },
+  errorIcon: {
+    fontSize: 20,
+    opacity: 0.9,
+    marginRight: theme.spacing.unit,
+  },
+  closeIcon: {
+    fontSize: 20,
+  },
+  errorMessage: {
+    display: 'flex',
+    alignItems: 'center',
+  },
 });
 
 class Index extends React.Component {
@@ -73,6 +83,13 @@ class Index extends React.Component {
       [name]: event.target.checked,
     });
   };
+
+  closeErrorSnackbar = () => {
+    this.setState({
+      isError: false,
+      errorMessage: '',
+    });
+  }
 
   state = {
     activeStep: 0,
@@ -180,14 +197,14 @@ class Index extends React.Component {
         <Button
           variant="contained"
           color="primary"
-          onClick={this.handleNext}>Lanjutkan
+          onClick={this.handleNext} >Lanjutkan
         </Button>
       )
     } else if (this.state.activeStep===this.steps.length) {
       return (
         <Button
           variant="contained"
-          onClick={this.handleReset}>Reset
+          onClick={this.handleReset} >Reset
         </Button>
       )
     } else {
@@ -196,12 +213,12 @@ class Index extends React.Component {
           <Button
             variant="contained"
             onClick={this.handleBack}
-            className={classes.backButton}>Kembali
+            className={classes.backButton} >Kembali
           </Button>
           <Button
             variant="contained"
             color="primary"
-            onClick={this.handleNext}>{this.state.activeStep === this.steps.length - 1 ? 'Proses' : 'Lanjutkan'}
+            onClick={this.handleNext} >{this.state.activeStep === this.steps.length - 1 ? 'Proses' : 'Lanjutkan'}
           </Button>
         </div>
       )
@@ -220,93 +237,10 @@ class Index extends React.Component {
     }
   }
 
-  handleStepOne = classes => {
-    return (
-      <div>
-
-        <TextField
-          error={this.state.emailError!=null? true : false}
-          className={classes.textField}
-          name="email"
-          label="Email"
-          type="email"
-          variant="outlined"
-          margin="normal"
-          onChange={this.handleTextFieldChange('email')}
-          fullWidth
-        />
-        {
-          this.state.emailError!=null ?
-          <div>
-          <FormHelperText id="email-helper" variant="outlined" >We'll never share your email.</FormHelperText>
-          <FormHelperText id="email-helper" variant="outlined" >We'll never share your emailzz.</FormHelperText>
-          </div> : ''
-        }
-
-        <TextField
-          className={classNames(classes.margin, classes.textField)}
-          name="password"
-          label="Password"
-          type={this.state.showPassword ? 'text' : 'password'}
-          variant="outlined"
-          margin="normal"
-          helperText={this.state.passwordError}
-          value={this.state.password}
-          onChange={this.handleTextFieldChange('password')}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="Toggle password visibility"
-                  onClick={this.handleClickShowPassword}
-                >
-                  {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-          fullWidth
-        />
-      </div>
-    );
-  }
-
-  handleStepTwo = classes => {
-    return (
-      <div>
-        <TextField
-          className={classes.textField}
-          name="destUrl"
-          label="Url"
-          type="text"
-          variant="outlined"
-          margin="normal"
-          // helperText={this.state.emailError}
-          onChange={this.handleTextFieldChange('destUrl')}
-          fullWidth
-        />
-        <TextField
-          className={classes.textField}
-          name="destSlug"
-          label="Data Perusahaan"
-          type="file"
-          variant="outlined"
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          // helperText={this.state.emailError}
-          onChange={this.handleTextFieldChange('destSlug')}
-          fullWidth
-        />
-      </div>
-    );
-  }
-
   handleStepThree = classes => {
     return (
-      <div className={classes.root}>
-        <FormControl component="fieldset" className={classes.formControl}>
+      <div className={classes.root} >
+        <FormControl component="fieldset" className={classes.formControl} >
           <FormGroup>
             <FormLabel>Data-data</FormLabel>
             <FormGroup>
@@ -392,7 +326,7 @@ class Index extends React.Component {
           </FormGroup>
           </FormGroup>
         </FormControl>
-        <FormControl component="fieldset" className={classes.formControl}>
+        <FormControl component="fieldset" className={classes.formControl} >
           <FormGroup>
             <FormLabel>Saldo Awal</FormLabel>
             <FormControlLabel
@@ -445,27 +379,50 @@ class Index extends React.Component {
 
   render() {
     const { classes } = this.props;
-    console.log(this.props.url)
-    // console.log(Validation({attribute: 'tes', value: '', validation: 'required|email'}));
 
     return (
-      <div className={classes.root}>
-        <Card className={classes.card}>
+      <div className={classes.root} >
+        <Card className={classes.card} >
           <CardContent>
             <Stepper activeStep={this.state.activeStep} alternativeLabel>
               {this.steps.map(label => (
-                <Step key={label}>
+                <Step key={label} >
                   <StepLabel>{label}</StepLabel>
                 </Step>
               ))}
             </Stepper>
-            {this.state.email}
-            <Typography className={classes.instructions}>{this.handleStepContent(classes)}</Typography>
+            <div className={classes.instructions} >{this.handleStepContent(classes)}</div>
           </CardContent>
-
         </Card>
-        <div>
-        </div>
+
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          open={this.state.isError}
+          autoHideDuration={6000}
+          onClose={this.closeErrorSnackbar} >
+          <SnackbarContent
+            className={classes.errorSnackbar}
+            aria-describedby='error-snackbar'
+            message={
+              <span id='error-snackbar' className={classes.errorMessage} >
+                <ErrorIcon className={classes.errorIcon} />{this.state.errorMessage}
+              </span>
+            }
+            action={[
+              <IconButton
+                className={classes.close}
+                key="close"
+                aria-label="Close"
+                color="inherit"
+                onClick={this.closeErrorSnackbar} >
+                <CloseIcon className={classes.closeIcon} />
+              </IconButton>
+            ]}
+          />
+        </Snackbar>
       </div>
     );
   }
