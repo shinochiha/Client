@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React from 'react';
 
 import Button from '@material-ui/core/Button';
@@ -5,10 +6,9 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-
-import axios from 'axios';
 
 import Validation from './Validation';
 
@@ -81,12 +81,12 @@ class Login extends React.Component {
           headers: {'Authorization': 'Basic '+ token}
         })
         .then(function (response) {
-          console.log(response.data.token)
+          let accessToken = JSON.parse(JSON.parse(atob(response.data.token)))
           props.handler({name: 'activeStep', value: 1})
-          props.handler({name: 'token', value: response.data.token})
+          props.handler({name: 'accessToken', value: accessToken.access_token})
+          props.handler({name: 'refreshToken', value: accessToken.refresh_token})
         })
         .catch(function (error) {
-          console.log(error.response.data)
           props.handler({name: 'isError', value: true})
           props.handler({name: 'errorMessage', value: error.response.data.error_description})
         });
@@ -96,6 +96,9 @@ class Login extends React.Component {
   render() {
     return (
       <div>
+        <Typography style={{ fontSize: 20, textAlign: 'center' }} gutterBottom variant="h5" component="h5">
+          Silakan login ke akun ZahirID Anda
+        </Typography>
         <TextField
           error={this.state.email.isError}
           name="email"

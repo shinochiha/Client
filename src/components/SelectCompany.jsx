@@ -1,33 +1,42 @@
 import React from 'react';
 
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import IconButton from '@material-ui/core/IconButton';
-import InputAdornment from '@material-ui/core/InputAdornment';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from '@material-ui/core/TextField';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
+// import Select from 'react-select';
 
 import Radio from '@material-ui/core/Radio';
-import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
-import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
 
 import Validation from './Validation';
 
 class SelectCompany extends React.Component {
 
   state = {
-    isError: true,
-    email: {
-      validation: 'required|email',
-      isError: false,
-      errorMessage: [],
-    },
-    password: {
+    destUrl: {
       validation: 'required',
       isError: false,
       errorMessage: [],
-      isShow: false,
+    },
+    destSlug: {
+      validation: 'required',
+      isError: false,
+      errorMessage: [],
+      suggestions: [],
+      selectedText: '',
+    },
+    originUrl: {
+      validation: 'required',
+      isError: false,
+      errorMessage: [],
+    },
+    originSlug: {
+      validation: 'required',
+      isError: false,
+      errorMessage: [],
+      suggestions: [],
+      selectedText: '',
     },
   }
 
@@ -88,40 +97,125 @@ class SelectCompany extends React.Component {
   render() {
     return (
       <div>
+        <Typography style={{ fontSize: 20 }} gutterBottom variant="h5" component="h5">
+          Data Tujuan
+        </Typography>
+        <FormControlLabel
+          control={
+            <Radio
+              checked={this.props.state.destType === 'subscribe'}
+              onChange={this.handleFieldChange('destType')}
+              value="subscribe"
+              color="primary"
+              name="radio-button-demo"
+              aria-label="Subscribe"
+            />
+          }
+          label="Subscribe"
+        />
+        <FormControlLabel
+          control={
+            <Radio
+              checked={this.props.state.destType === 'onPremise'}
+              onChange={this.handleFieldChange('destType')}
+              value="onPremise"
+              color="primary"
+              name="radio-button-demo"
+              aria-label="onPremise"
+            />
+          }
+          label="On Premise"
+        />
+        <TextField
+          error={this.state.destUrl.isError}
+          name="destUrl"
+          label="Url"
+          variant="outlined"
+          margin="normal"
+          value={this.props.state.destUrl}
+          onChange={this.handleFieldChange('destUrl')}
+          fullWidth
+        />
+        {this.handleValidationMessage('destUrl')}
+        <TextField
+          error={this.state.destSlug.isError}
+          name="destSlug"
+          label="Select Company"
+          variant="outlined"
+          margin="normal"
+          value={this.props.state.destSlug}
+          onChange={this.handleFieldChange('destSlug')}
+          fullWidth
+        />
+        {this.handleValidationMessage('destSlug')}
 
+        <Typography style={{ fontSize: 20, marginTop: 20 }} gutterBottom variant="h5" component="h5">
+          Data Sumber
+        </Typography>
+        <FormControlLabel
+          control={
+            <Radio
+              checked={this.props.state.originType === 'zahir6'}
+              onChange={this.handleFieldChange('originType')}
+              value="zahir6"
+              color="primary"
+              name="radio-button-demo"
+              aria-label="zahir6"
+            />
+          }
+          label="Zahir 6"
+        />
+        <FormControlLabel
+          control={
+            <Radio
+              checked={this.props.state.originType === 'zahir5'}
+              onChange={this.handleFieldChange('originType')}
+              value="zahir5"
+              color="primary"
+              name="radio-button-demo"
+              aria-label="zahir5"
+            />
+          }
+          label="Zahir 5"
+        />
+        <FormControlLabel
+          control={
+            <Radio
+              checked={this.props.state.originType === 'zahironline'}
+              onChange={this.handleFieldChange('originType')}
+              value="zahironline"
+              color="primary"
+              name="radio-button-demo"
+              aria-label="zahironline"
+            />
+          }
+          label="Zahir Online"
+        />
         <TextField
-          error={this.state.email.isError}
-          name="email"
-          label="Email"
-          type="email"
+          error={this.state.originUrl.isError}
+          name="originUrl"
+          label="Url"
           variant="outlined"
           margin="normal"
-          value={this.props.state.email}
-          onChange={this.handleFieldChange('email')}
+          value={this.props.state.originUrl}
+          onChange={this.handleFieldChange('originUrl')}
           fullWidth
         />
-        {this.handleValidationMessage('email')}
+        {this.handleValidationMessage('originUrl')}
         <TextField
-          error={this.state.password.isError}
-          name="password"
-          label="Password"
-          type={this.state.password.isShow ? 'text' : 'password'}
+          error={this.state.originSlug.isError}
+          name="originSlug"
+          type="file"
+          InputLabelProps={{ shrink: true }}
+          label="Select Company"
           variant="outlined"
           margin="normal"
-          value={this.props.state.password}
-          onChange={this.handleFieldChange('password')}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={this.handleClickShowPassword}>
-                  {this.state.password.isShow ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
+          value={this.props.state.originSlug}
+          onChange={this.handleFieldChange('originSlug')}
           fullWidth
         />
-        {this.handleValidationMessage('password')}
+        {this.handleValidationMessage('originSlug')}
+
         <div style={{ width: '100%', textAlign: 'right' }}>
           <Button onClick={this.handlePrevious} variant="contained" color='default' style={{margin: '10px 10px 0 0'}}>
             Kembali

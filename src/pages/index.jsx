@@ -2,24 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-
+import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-
-import ErrorIcon from '@material-ui/icons/Error';
-import Button from '@material-ui/core/Button';
+import Checkbox from '@material-ui/core/Checkbox';
 import CloseIcon from "@material-ui/icons/Close";
-import IconButton from '@material-ui/core/IconButton';
+import ErrorIcon from '@material-ui/icons/Error';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
+import Step from '@material-ui/core/Step';
+import Stepper from '@material-ui/core/Stepper';
+import StepLabel from '@material-ui/core/StepLabel';
 
 import Login from '../components/Login'
 import SelectCompany from '../components/SelectCompany'
@@ -98,12 +96,13 @@ class Index extends React.Component {
     email: '',
     password: '',
     accessToken: '',
-    originType: '',
-    originUrl: '',
-    originSlug: '',
-    destType: '',
+    refreshToken: '',
+    destType: 'subscribe',
     destUrl: '',
     destSlug: '',
+    originType: 'zahir6',
+    originUrl: '',
+    originSlug: '',
     accounts: true,
     accountCountAll: 0,
     accountCountSynced: 0,
