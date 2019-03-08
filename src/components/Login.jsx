@@ -97,7 +97,7 @@ class Login extends React.Component {
     return (
       <div>
         <Typography style={{ fontSize: 20, textAlign: 'center' }} gutterBottom variant="h5" component="h5">
-          Silakan login ke akun ZahirID Anda
+          Please log in to your ZahirID account
         </Typography>
         <TextField
           error={this.state.email.isError}
