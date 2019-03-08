@@ -18,7 +18,7 @@ class Status extends React.Component {
   };
 
   componentDidMount() {
-    axios.get(`http://localhost:9001/accounts`)
+    axios.get(`/accounts`)
     .then(res => {
       const completed = res.data;
       this.setState({ completed })
