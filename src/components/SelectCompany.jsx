@@ -7,6 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem';
+import Paper from '@material-ui/core/Paper';
 import Select from 'react-select';
 
 import Radio from '@material-ui/core/Radio';
@@ -36,9 +38,35 @@ function Control(props) {
   );
 }
 
+function Option(props) {
+  return (
+    <MenuItem
+      buttonRef={props.innerRef}
+      selected={props.isFocused}
+      component="div"
+      style={{
+        fontWeight: props.isSelected ? 500 : 400,
+      }}
+      {...props.innerProps}
+    >
+      {props.children}
+    </MenuItem>
+  );
+}
+
+function Menu(props) {
+  return (
+    <Paper square style={{zIndex: 10}} {...props.innerProps}>
+      {props.children}
+    </Paper>
+  );
+}
+
 
 const components = {
   Control,
+  Option,
+  Menu
 };
 
 class SelectCompany extends React.Component {
@@ -73,11 +101,17 @@ class SelectCompany extends React.Component {
       isError: false,
       errorMessage: [],
     },
+    originType: {
+      validation: 'required',
+      isError: false,
+      errorMessage: [],
+    },
     options: [{
       label: '',
       value: ''
     }],
-    shrink: false
+    shrink: false,
+    slug: '',
   }
 
   handleFieldChange = name => event => {
@@ -86,7 +120,7 @@ class SelectCompany extends React.Component {
 
   handleValidation = ({name, value}) => {
     this.props.handler({name: name, value: value});
-
+    console.log(name)
     let newState = {...this.state[name]}
     let errorMessage = Validation({'attribute': name, 'validation': this.state[name].validation, 'value': value});
     if (errorMessage.length>0) {
@@ -135,7 +169,7 @@ class SelectCompany extends React.Component {
   }
 
   getDataCompany = (value) => {
-    this.setState({shrink:true})
+    // this.setState({shrink:true})
     axios.get('/destination_companies?search[company.name]=' + value , {
         headers: {
           'Authorization': 'Bearer ' + this.props.state.accessToken,
@@ -157,13 +191,43 @@ class SelectCompany extends React.Component {
       })
   }
 
+  getDataCompanyFocus = () => {
+    this.setState({shrink:true})
+    axios.get('/destination_companies?search[company.name]=', {
+        headers: {
+          'Authorization': 'Bearer ' + this.props.state.accessToken,
+          'destination_type': 'subscribe'
+        }
+      }).then(res => {
+        const list = res && res.data && res.data.results
+        if(list) {
+          const options = list.map(data => {
+            return {
+              label: data.company.name,
+              value: data.company.slug
+            }
+          })
+          this.setState({
+            options : options
+          })
+        }
+      })
+  }
+
   handleChangeCompany = (value) => {
-    this.props.handler({name: 'destUrl', value: value});
+    this.handleValidation({name: 'destSlug', value: value.value});
+    this.setState({slug: value})
+  }
+
+  handleBlur = () => {
+    if (this.state.slug === '' || !this.state.slug) {
+      this.setState({shrink:false})
+    }
   }
 
   render() {
     const { destType } = this.props.state
-
+    console.log(this.props.state.destUrl)
     return (
       <div>
         <Typography style={{ fontSize: 20 }} gutterBottom variant="h5" component="h5">
@@ -215,9 +279,10 @@ class SelectCompany extends React.Component {
           destType === 'subscribe' ?
           <div>
           <Select
-              onFocus={this.getDataCompany}
+              onFocus={this.getDataCompanyFocus}
+              onBlur={this.handleBlur}
               options={this.state.options}
-              value={this.props.state.destUrl}
+              value={this.state.slug}
               onInputChange={this.getDataCompany}
               onChange={this.handleChangeCompany}
               isClearable

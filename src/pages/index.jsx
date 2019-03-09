@@ -5,8 +5,13 @@ import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import Checkbox from '@material-ui/core/Checkbox';
 import CloseIcon from "@material-ui/icons/Close";
 import ErrorIcon from '@material-ui/icons/Error';
+import FormLabel from '@material-ui/core/FormLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
@@ -14,9 +19,9 @@ import Step from '@material-ui/core/Step';
 import Stepper from '@material-ui/core/Stepper';
 import StepLabel from '@material-ui/core/StepLabel';
 
-import Login from '../components/Login';
-import SelectCompany from '../components/SelectCompany';
-import SelectData from '../components/SelectData';
+import Login from '../components/Login'
+import SelectCompany from '../components/SelectCompany'
+import SelectData from '../components/SelectData'
 
 import withRoot from '../withRoot';
 
@@ -93,7 +98,7 @@ class Index extends React.Component {
     password: '',
     accessToken: '',
     refreshToken: '',
-    destType: '',
+    destType: 'subscribe',
     destUrl: '',
     destSlug: '',
     originType: 'zahir6',
@@ -222,15 +227,151 @@ class Index extends React.Component {
 
   handleStepContent = classes => {
     if (this.state.activeStep===0) {
-      return <Login state={this.state} handler={this.handler.bind(this)} />
+      return <Login state={this.state} handler={this.handler.bind(this)}/>
     } else if (this.state.activeStep===1) {
-      return <SelectCompany state={this.state} handler={this.handler.bind(this)} />
+      return <SelectCompany state={this.state} handler={this.handler.bind(this)}/>
     } else if (this.state.activeStep===2) {
-      return <SelectData state={this.state} handler={this.handler.bind(this)} />;
+      return <SelectData state={this.state} classes={classes} handleCheckboxChange={this.handleCheckboxChange.bind(this)}/>
     } else if (this.state.activeStep===this.steps.length) {
       return this.handleFinishStep(classes);
     }
   }
+
+  // handleStepThree = classes => {
+  //   return (
+  //     <div className={classes.root} >
+  //       <FormControl component="fieldset" className={classes.formControl} >
+  //         <FormGroup>
+  //           <FormLabel>Data-data</FormLabel>
+  //           <FormGroup>
+  //           <FormControlLabel
+  //             control={
+  //               <Checkbox
+  //                 checked={this.state.accounts}
+  //                 onChange={this.handleCheckboxChange('accounts')}
+  //                 value="accounts" />
+  //             }
+  //             label="Akun"
+  //           />
+  //           <FormControlLabel
+  //             control={
+  //               <Checkbox
+  //                 checked={this.state.contacts}
+  //                 onChange={this.handleCheckboxChange('contacts')}
+  //                 value="contacts" />
+  //             }
+  //             label="Kontak"
+  //           />
+  //           <FormControlLabel
+  //             control={
+  //               <Checkbox
+  //                 checked={this.state.products}
+  //                 onChange={this.handleCheckboxChange('products')}
+  //                 value="products"
+  //               />
+  //             }
+  //             label="Produk"
+  //           />
+  //           <FormControlLabel
+  //             control={
+  //               <Checkbox
+  //                 checked={this.state.taxes}
+  //                 onChange={this.handleCheckboxChange('taxes')}
+  //                 value="taxes"
+  //               />
+  //             }
+  //             label="Pajak"
+  //           />
+  //         </FormGroup>
+  //         <FormGroup>
+  //           <FormLabel>Data-data</FormLabel>
+  //           <FormControlLabel
+  //             control={
+  //               <Checkbox
+  //                 checked={this.state.departments}
+  //                 onChange={this.handleCheckboxChange('departments')}
+  //                 value="departments" />
+  //             }
+  //             label="Departemen"
+  //           />
+  //           <FormControlLabel
+  //             control={
+  //               <Checkbox
+  //                 checked={this.state.projects}
+  //                 onChange={this.handleCheckboxChange('projects')}
+  //                 value="projects" />
+  //             }
+  //             label="Proyek"
+  //           />
+  //           <FormControlLabel
+  //             control={
+  //               <Checkbox
+  //                 checked={this.state.warehouses}
+  //                 onChange={this.handleCheckboxChange('warehouses')}
+  //                 value="warehouses"
+  //               />
+  //             }
+  //             label="Gudang"
+  //           />
+  //           <FormControlLabel
+  //             control={
+  //               <Checkbox
+  //                 checked={this.state.fixedAssets}
+  //                 onChange={this.handleCheckboxChange('fixedAssets')}
+  //                 value="fixedAssets"
+  //               />
+  //             }
+  //             label="Harta Tetap"
+  //           />
+  //         </FormGroup>
+  //         </FormGroup>
+  //       </FormControl>
+  //       <FormControl component="fieldset" className={classes.formControl} >
+  //         <FormGroup>
+  //           <FormLabel>Saldo Awal</FormLabel>
+  //           <FormControlLabel
+  //             control={
+  //               <Checkbox
+  //                 checked={this.state.accountBeginningBalances}
+  //                 onChange={this.handleCheckboxChange('accountBeginningBalances')}
+  //                 value="accountBeginningBalances" />
+  //             }
+  //             label="Akun"
+  //           />
+  //           <FormControlLabel
+  //             control={
+  //               <Checkbox
+  //                 checked={this.state.receivableBeginningBalances}
+  //                 onChange={this.handleCheckboxChange('receivableBeginningBalances')}
+  //                 value="receivableBeginningBalances" />
+  //             }
+  //             label="Piutang"
+  //           />
+  //           <FormControlLabel
+  //             control={
+  //               <Checkbox
+  //                 checked={this.state.payableBeginningBalances}
+  //                 onChange={this.handleCheckboxChange('payableBeginningBalances')}
+  //                 value="payableBeginningBalances"
+  //               />
+  //             }
+  //             label="Utang"
+  //           />
+  //           <FormControlLabel
+  //             control={
+  //               <Checkbox
+  //                 checked={this.state.inventoryBeginningBalances}
+  //                 onChange={this.handleCheckboxChange('inventoryBeginningBalances')}
+  //                 value="inventoryBeginningBalances"
+  //               />
+  //             }
+  //             label="Persediaan"
+  //           />
+  //         </FormGroup>
+  //       </FormControl>
+  //     </div>
+  //   );
+  // }
 
   handleFinishStep = classes => {
     return 'finish';

@@ -8,8 +8,9 @@ import Checkbox from '@material-ui/core/Checkbox';
 
 
 class SelectData extends React.Component {
+  render() {
 
-  handleStepThree = classes => {
+    const {classes} = this.props
     return (
       <div className={classes.root} >
         <FormControl component="fieldset" className={classes.formControl} >
@@ -19,8 +20,8 @@ class SelectData extends React.Component {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={this.state.accounts}
-                  onChange={this.handleCheckboxChange('accounts')}
+                  checked={this.props.state.accounts}
+                  onChange={this.props.handleCheckboxChange('accounts')}
                   value="accounts" />
               }
               label="Akun"
@@ -28,8 +29,8 @@ class SelectData extends React.Component {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={this.state.contacts}
-                  onChange={this.handleCheckboxChange('contacts')}
+                  checked={this.props.state.contacts}
+                  onChange={this.props.handleCheckboxChange('contacts')}
                   value="contacts" />
               }
               label="Kontak"
@@ -37,8 +38,8 @@ class SelectData extends React.Component {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={this.state.products}
-                  onChange={this.handleCheckboxChange('products')}
+                  checked={this.props.state.products}
+                  onChange={this.props.handleCheckboxChange('products')}
                   value="products"
                 />
               }
@@ -47,8 +48,8 @@ class SelectData extends React.Component {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={this.state.taxes}
-                  onChange={this.handleCheckboxChange('taxes')}
+                  checked={this.props.state.taxes}
+                  onChange={this.props.handleCheckboxChange('taxes')}
                   value="taxes"
                 />
               }
@@ -60,8 +61,8 @@ class SelectData extends React.Component {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={this.state.departments}
-                  onChange={this.handleCheckboxChange('departments')}
+                  checked={this.props.state.departments}
+                  onChange={this.props.handleCheckboxChange('departments')}
                   value="departments" />
               }
               label="Departemen"
@@ -69,8 +70,8 @@ class SelectData extends React.Component {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={this.state.projects}
-                  onChange={this.handleCheckboxChange('projects')}
+                  checked={this.props.state.projects}
+                  onChange={this.props.handleCheckboxChange('projects')}
                   value="projects" />
               }
               label="Proyek"
@@ -78,8 +79,8 @@ class SelectData extends React.Component {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={this.state.warehouses}
-                  onChange={this.handleCheckboxChange('warehouses')}
+                  checked={this.props.state.warehouses}
+                  onChange={this.props.handleCheckboxChange('warehouses')}
                   value="warehouses"
                 />
               }
@@ -88,8 +89,8 @@ class SelectData extends React.Component {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={this.state.fixedAssets}
-                  onChange={this.handleCheckboxChange('fixedAssets')}
+                  checked={this.props.state.fixedAssets}
+                  onChange={this.props.handleCheckboxChange('fixedAssets')}
                   value="fixedAssets"
                 />
               }
@@ -104,8 +105,8 @@ class SelectData extends React.Component {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={this.state.accountBeginningBalances}
-                  onChange={this.handleCheckboxChange('accountBeginningBalances')}
+                  checked={this.props.state.accountBeginningBalances}
+                  onChange={this.props.handleCheckboxChange('accountBeginningBalances')}
                   value="accountBeginningBalances" />
               }
               label="Akun"
@@ -113,8 +114,8 @@ class SelectData extends React.Component {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={this.state.receivableBeginningBalances}
-                  onChange={this.handleCheckboxChange('receivableBeginningBalances')}
+                  checked={this.props.state.receivableBeginningBalances}
+                  onChange={this.props.handleCheckboxChange('receivableBeginningBalances')}
                   value="receivableBeginningBalances" />
               }
               label="Piutang"
@@ -122,8 +123,8 @@ class SelectData extends React.Component {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={this.state.payableBeginningBalances}
-                  onChange={this.handleCheckboxChange('payableBeginningBalances')}
+                  checked={this.props.state.payableBeginningBalances}
+                  onChange={this.props.handleCheckboxChange('payableBeginningBalances')}
                   value="payableBeginningBalances"
                 />
               }
@@ -132,8 +133,8 @@ class SelectData extends React.Component {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={this.state.inventoryBeginningBalances}
-                  onChange={this.handleCheckboxChange('inventoryBeginningBalances')}
+                  checked={this.props.state.inventoryBeginningBalances}
+                  onChange={this.props.handleCheckboxChange('inventoryBeginningBalances')}
                   value="inventoryBeginningBalances"
                 />
               }
@@ -145,5 +146,4 @@ class SelectData extends React.Component {
     );
   }
 }
-
 export default SelectData;
