@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 import React from 'react';
 
 import Button from '@material-ui/core/Button';
@@ -5,11 +7,39 @@ import Typography from '@material-ui/core/Typography';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from '@material-ui/core/TextField';
-// import Select from 'react-select';
+import Select from 'react-select';
 
 import Radio from '@material-ui/core/Radio';
 
 import Validation from './Validation';
+
+
+function inputComponent({ inputRef, ...props }) {
+  return <div style={{display: 'flex', justifyContent: 'space-between', padding: 10}} ref={inputRef} {...props} />;
+}
+
+function Control(props) {
+  return (
+    <TextField
+      fullWidth
+      variant="outlined"
+      InputProps={{
+      inputComponent,
+      inputProps: {
+        inputRef: props.innerRef,
+        children: props.children,
+        ...props.innerProps,
+      },
+    }}
+    {...props.selectProps.textFieldProps}
+    />
+  );
+}
+
+
+const components = {
+  Control,
+};
 
 class SelectCompany extends React.Component {
 
@@ -38,6 +68,16 @@ class SelectCompany extends React.Component {
       suggestions: [],
       selectedText: '',
     },
+    destType: {
+      validation: 'required',
+      isError: false,
+      errorMessage: [],
+    },
+    options: [{
+      label: '',
+      value: ''
+    }],
+    shrink: false
   }
 
   handleFieldChange = name => event => {
@@ -94,7 +134,36 @@ class SelectCompany extends React.Component {
     }
   }
 
+  getDataCompany = (value) => {
+    this.setState({shrink:true})
+    axios.get('/destination_companies?search[company.name]=' + value , {
+        headers: {
+          'Authorization': 'Bearer ' + this.props.state.accessToken,
+          'destination_type': 'subscribe'
+        }
+      }).then(res => {
+        const list = res && res.data && res.data.results
+        if(list) {
+          const options = list.map(data => {
+            return {
+              label: data.company.name,
+              value: data.company.slug
+            }
+          })
+          this.setState({
+            options : options
+          })
+        }
+      })
+  }
+
+  handleChangeCompany = (value) => {
+    this.props.handler({name: 'destUrl', value: value});
+  }
+
   render() {
+    const { destType } = this.props.state
+
     return (
       <div>
         <Typography style={{ fontSize: 20 }} gutterBottom variant="h5" component="h5">
@@ -126,28 +195,44 @@ class SelectCompany extends React.Component {
           }
           label="On Premise"
         />
-        <TextField
-          error={this.state.destUrl.isError}
-          name="destUrl"
-          label="Url"
-          variant="outlined"
-          margin="normal"
-          value={this.props.state.destUrl}
-          onChange={this.handleFieldChange('destUrl')}
-          fullWidth
-        />
-        {this.handleValidationMessage('destUrl')}
-        <TextField
-          error={this.state.destSlug.isError}
-          name="destSlug"
-          label="Select Company"
-          variant="outlined"
-          margin="normal"
-          value={this.props.state.destSlug}
-          onChange={this.handleFieldChange('destSlug')}
-          fullWidth
-        />
-        {this.handleValidationMessage('destSlug')}
+        {
+          destType === 'onPremise' ?
+          <div>
+          <TextField
+            error={this.state.destUrl.isError}
+            name="destUrl"
+            label="Url"
+            variant="outlined"
+            margin="normal"
+            value={this.props.state.destUrl}
+            onChange={this.handleFieldChange('destUrl')}
+            fullWidth
+          />
+          {this.handleValidationMessage('destUrl')}
+          </div> : null
+        }
+        {
+          destType === 'subscribe' ?
+          <div>
+          <Select
+              onFocus={this.getDataCompany}
+              options={this.state.options}
+              value={this.props.state.destUrl}
+              onInputChange={this.getDataCompany}
+              onChange={this.handleChangeCompany}
+              isClearable
+              placeholder=''
+              components={components}
+              textFieldProps={{
+                label: 'Select Company',
+                InputLabelProps: {
+                  shrink: this.state.shrink,
+                },
+              }}
+            />
+          {this.handleValidationMessage('destSlug')}
+          </div> : null
+        }
 
         <Typography style={{ fontSize: 20, marginTop: 20 }} gutterBottom variant="h5" component="h5">
           Data Sumber

@@ -93,7 +93,7 @@ class Index extends React.Component {
     password: '',
     accessToken: '',
     refreshToken: '',
-    destType: 'subscribe',
+    destType: '',
     destUrl: '',
     destSlug: '',
     originType: 'zahir6',
