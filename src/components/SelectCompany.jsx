@@ -120,7 +120,6 @@ class SelectCompany extends React.Component {
 
   handleValidation = ({name, value}) => {
     this.props.handler({name: name, value: value});
-    console.log(name)
     let newState = {...this.state[name]}
     let errorMessage = Validation({'attribute': name, 'validation': this.state[name].validation, 'value': value});
     if (errorMessage.length>0) {
@@ -169,7 +168,6 @@ class SelectCompany extends React.Component {
   }
 
   getDataCompany = (value) => {
-    // this.setState({shrink:true})
     axios.get('/destination_companies?search[company.name]=' + value , {
         headers: {
           'Authorization': 'Bearer ' + this.props.state.accessToken,
@@ -215,8 +213,8 @@ class SelectCompany extends React.Component {
   }
 
   handleChangeCompany = (value) => {
-    this.handleValidation({name: 'destSlug', value: value.value});
-    this.setState({slug: value})
+    this.handleValidation({name: 'destSlug', value: value ? value.value : ''});
+    this.setState({slug: value ? value : ''})
   }
 
   handleBlur = () => {
@@ -277,7 +275,7 @@ class SelectCompany extends React.Component {
         }
         {
           destType === 'subscribe' ?
-          <div>
+          <div style={{marginTop: 15}}>
           <Select
               onFocus={this.getDataCompanyFocus}
               onBlur={this.handleBlur}

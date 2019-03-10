@@ -13,38 +13,58 @@ const styles = {
 
 class Status extends React.Component {
   state = {
-    completed: [],
+    accounts: [],
+    contacts: [],
     buffer: 10,
   };
 
   componentDidMount() {
-    axios.get(`/accounts`)
+    axios.get('/accounts')
     .then(res => {
-      const completed = res.data;
-      this.setState({ completed })
+      this.setState({accounts: res.data.count})
+    })
+     axios.get('/contacts')
+    .then(res => {
+      this.setState({contacts: res.data.count})
     })
   }
 
   progress = () => {
-    const { completed } = this.state;
-    if (completed > completed.length) {
-      this.setState({ completed: 0, buffer: 10 });
+    const { accounts } = this.state;
+    if (accounts > accounts.length) {
+      this.setState({ accounts: 0, buffer: 10 });
     } else {
       const diff = Math.random() * 10;
       const diff2 = Math.random() * 10;
-      this.setState({ completed: completed + diff, buffer: completed + diff + diff2 });
+      this.setState({ accounts: accounts + diff, buffer: accounts + diff + diff2 });
+    }
+  };
+
+  progress2 = () => {
+    const { contacts } = this.state;
+    if (contacts > contacts.length) {
+      this.setState({ contacts: 0, buffer: 10 });
+    } else {
+      const diff = Math.random() * 10;
+      const diff2 = Math.random() * 10;
+      this.setState({ contacts: contacts + diff, buffer: contacts + diff + diff2 });
     }
   };
 
   render() {
     const { classes } = this.props;
-    const { completed, buffer } = this.state;
+    const { accounts, contacts,buffer } = this.state;
     return (
       <div className={classes.root}>
-
-        <LinearProgress variant="buffer" value={completed} valueBuffer={buffer} />
+        <p>Accounts: {this.state.accounts}</p>
+        <LinearProgress variant="buffer" value={accounts} valueBuffer={buffer} />
         <br />
-        <LinearProgress color="secondary" variant="buffer" value={completed} valueBuffer={buffer} />
+        <LinearProgress color="secondary" variant="buffer" value={accounts} valueBuffer={buffer} />
+        <br />
+        <p>Contacts: {this.state.contacts}</p>
+        <LinearProgress variant="buffer" value={contacts} valueBuffer={buffer} />
+        <br />
+        <LinearProgress color="secondary" variant="buffer" value={contacts} valueBuffer={buffer} />
       </div>
     );
   }

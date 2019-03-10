@@ -8,6 +8,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 
 
 class SelectData extends React.Component {
+
   render() {
 
     const {classes} = this.props
@@ -22,7 +23,7 @@ class SelectData extends React.Component {
                 <Checkbox
                   checked={this.props.state.accounts}
                   onChange={this.props.handleCheckboxChange('accounts')}
-                  value="accounts" />
+                  value='accounts' />
               }
               label="Akun"
             />

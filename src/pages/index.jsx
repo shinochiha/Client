@@ -1,17 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import Checkbox from '@material-ui/core/Checkbox';
 import CloseIcon from "@material-ui/icons/Close";
 import ErrorIcon from '@material-ui/icons/Error';
-import FormLabel from '@material-ui/core/FormLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
@@ -22,6 +18,7 @@ import StepLabel from '@material-ui/core/StepLabel';
 import Login from '../components/Login'
 import SelectCompany from '../components/SelectCompany'
 import SelectData from '../components/SelectData'
+import Status from '../components/Status'
 
 import withRoot from '../withRoot';
 
@@ -81,6 +78,42 @@ class Index extends React.Component {
     this.setState({
       [name]: event.target.checked,
     });
+    //  Get Accounts
+    if (name === 'accounts') {
+        if (event.target.checked) {
+          axios.get('/accounts')
+        .then(res => {
+          console.log(res)
+          this.setState({accountCountAll: res.data.count})
+        })
+      } else {
+        this.setState({accountCountAll: 0})
+      }
+    } 
+    // Get Contacts
+    if (name === 'contacts') {
+        if (event.target.checked) {
+          axios.get('/contacts')
+        .then(res => {
+          console.log(res)
+          this.setState({contactCountAll: res.data.count})
+        })
+      } else {
+        this.setState({contactCountAll: 0})
+      }
+    } 
+    // Get Products
+    if (name === 'products') {
+        if (event.target.checked) {
+          axios.get('/products')
+        .then(res => {
+          console.log(res)
+          this.setState({productsCountAll: res.data.count})
+        })
+      } else {
+        this.setState({productsCountAll: 0})
+      }
+    } 
   };
 
   closeErrorSnackbar = () => {
@@ -91,7 +124,7 @@ class Index extends React.Component {
   }
 
   state = {
-    activeStep: 0,
+    activeStep: 2,
     isError: false,
     errorMessage: '',
     email: '',
@@ -104,59 +137,59 @@ class Index extends React.Component {
     originType: 'zahir6',
     originUrl: '',
     originSlug: '',
-    accounts: true,
+    accounts: false,
     accountCountAll: 0,
     accountCountSynced: 0,
     accountCountFailed: 0,
-    contacts: true,
+    contacts: false,
     contactCountAll: 0,
     contactCountSynced: 0,
     contactCountFailed: 0,
-    products: true,
+    products: false,
     productCountAll: 0,
     productCountSynced: 0,
     productCountFailed: 0,
-    taxes: true,
+    taxes: false,
     taxeCountAll: 0,
     taxeCountSynced: 0,
     taxeCountFailed: 0,
-    departments: true,
+    departments: false,
     departmentCountAll: 0,
     departmentCountSynced: 0,
     departmentCountFailed: 0,
-    projects: true,
+    projects: false,
     projectCountAll: 0,
     projectCountSynced: 0,
     projectCountFailed: 0,
-    warehouses: true,
+    warehouses: false,
     warehouseCountAll: 0,
     warehouseCountSynced: 0,
     warehouseCountFailed: 0,
-    fixedAssets: true,
+    fixedAssets: false,
     fixedAssetCountAll: 0,
     fixedAssetCountSynced: 0,
     fixedAssetCountFailed: 0,
-    accountBeginningBalances: true,
+    accountBeginningBalances: false,
     accountBeginningBalanceCountAll: 0,
     accountBeginningBalanceCountSynced: 0,
     accountBeginningBalanceCountFailed: 0,
-    receivableBeginningBalances: true,
+    receivableBeginningBalances: false,
     receivableBeginningBalanceCountAll: 0,
     receivableBeginningBalanceCountSynced: 0,
     receivableBeginningBalanceCountFailed: 0,
-    payableBeginningBalances: true,
+    payableBeginningBalances: false,
     payableBeginningBalanceCountAll: 0,
     payableBeginningBalanceCountSynced: 0,
     payableBeginningBalanceCountFailed: 0,
-    salesPrepaymentBeginningBalances: true,
+    salesPrepaymentBeginningBalances: false,
     salesPrepaymentBeginningBalanceCountAll: 0,
     salesPrepaymentBeginningBalanceCountSynced: 0,
     salesPrepaymentBeginningBalanceCountFailed: 0,
-    purchasesPrepaymentBeginningBalances: true,
+    purchasesPrepaymentBeginningBalances: false,
     purchasesPrepaymentBeginningBalanceCountAll: 0,
     purchasesPrepaymentBeginningBalanceCountSynced: 0,
     purchasesPrepaymentBeginningBalanceCountFailed: 0,
-    inventoryBeginningBalances: true,
+    inventoryBeginningBalances: false,
     inventoryBeginningBalanceCountAll: 0,
     inventoryBeginningBalanceCountSynced: 0,
     inventoryBeginningBalanceCountFailed: 0,
@@ -232,146 +265,11 @@ class Index extends React.Component {
       return <SelectCompany state={this.state} handler={this.handler.bind(this)}/>
     } else if (this.state.activeStep===2) {
       return <SelectData state={this.state} classes={classes} handleCheckboxChange={this.handleCheckboxChange.bind(this)}/>
-    } else if (this.state.activeStep===this.steps.length) {
-      return this.handleFinishStep(classes);
+    } else if (this.state.activeStep===this.steps.length - 1) {
+      // return this.handleFinishStep(classes);
+      return <Status />
     }
   }
-
-  // handleStepThree = classes => {
-  //   return (
-  //     <div className={classes.root} >
-  //       <FormControl component="fieldset" className={classes.formControl} >
-  //         <FormGroup>
-  //           <FormLabel>Data-data</FormLabel>
-  //           <FormGroup>
-  //           <FormControlLabel
-  //             control={
-  //               <Checkbox
-  //                 checked={this.state.accounts}
-  //                 onChange={this.handleCheckboxChange('accounts')}
-  //                 value="accounts" />
-  //             }
-  //             label="Akun"
-  //           />
-  //           <FormControlLabel
-  //             control={
-  //               <Checkbox
-  //                 checked={this.state.contacts}
-  //                 onChange={this.handleCheckboxChange('contacts')}
-  //                 value="contacts" />
-  //             }
-  //             label="Kontak"
-  //           />
-  //           <FormControlLabel
-  //             control={
-  //               <Checkbox
-  //                 checked={this.state.products}
-  //                 onChange={this.handleCheckboxChange('products')}
-  //                 value="products"
-  //               />
-  //             }
-  //             label="Produk"
-  //           />
-  //           <FormControlLabel
-  //             control={
-  //               <Checkbox
-  //                 checked={this.state.taxes}
-  //                 onChange={this.handleCheckboxChange('taxes')}
-  //                 value="taxes"
-  //               />
-  //             }
-  //             label="Pajak"
-  //           />
-  //         </FormGroup>
-  //         <FormGroup>
-  //           <FormLabel>Data-data</FormLabel>
-  //           <FormControlLabel
-  //             control={
-  //               <Checkbox
-  //                 checked={this.state.departments}
-  //                 onChange={this.handleCheckboxChange('departments')}
-  //                 value="departments" />
-  //             }
-  //             label="Departemen"
-  //           />
-  //           <FormControlLabel
-  //             control={
-  //               <Checkbox
-  //                 checked={this.state.projects}
-  //                 onChange={this.handleCheckboxChange('projects')}
-  //                 value="projects" />
-  //             }
-  //             label="Proyek"
-  //           />
-  //           <FormControlLabel
-  //             control={
-  //               <Checkbox
-  //                 checked={this.state.warehouses}
-  //                 onChange={this.handleCheckboxChange('warehouses')}
-  //                 value="warehouses"
-  //               />
-  //             }
-  //             label="Gudang"
-  //           />
-  //           <FormControlLabel
-  //             control={
-  //               <Checkbox
-  //                 checked={this.state.fixedAssets}
-  //                 onChange={this.handleCheckboxChange('fixedAssets')}
-  //                 value="fixedAssets"
-  //               />
-  //             }
-  //             label="Harta Tetap"
-  //           />
-  //         </FormGroup>
-  //         </FormGroup>
-  //       </FormControl>
-  //       <FormControl component="fieldset" className={classes.formControl} >
-  //         <FormGroup>
-  //           <FormLabel>Saldo Awal</FormLabel>
-  //           <FormControlLabel
-  //             control={
-  //               <Checkbox
-  //                 checked={this.state.accountBeginningBalances}
-  //                 onChange={this.handleCheckboxChange('accountBeginningBalances')}
-  //                 value="accountBeginningBalances" />
-  //             }
-  //             label="Akun"
-  //           />
-  //           <FormControlLabel
-  //             control={
-  //               <Checkbox
-  //                 checked={this.state.receivableBeginningBalances}
-  //                 onChange={this.handleCheckboxChange('receivableBeginningBalances')}
-  //                 value="receivableBeginningBalances" />
-  //             }
-  //             label="Piutang"
-  //           />
-  //           <FormControlLabel
-  //             control={
-  //               <Checkbox
-  //                 checked={this.state.payableBeginningBalances}
-  //                 onChange={this.handleCheckboxChange('payableBeginningBalances')}
-  //                 value="payableBeginningBalances"
-  //               />
-  //             }
-  //             label="Utang"
-  //           />
-  //           <FormControlLabel
-  //             control={
-  //               <Checkbox
-  //                 checked={this.state.inventoryBeginningBalances}
-  //                 onChange={this.handleCheckboxChange('inventoryBeginningBalances')}
-  //                 value="inventoryBeginningBalances"
-  //               />
-  //             }
-  //             label="Persediaan"
-  //           />
-  //         </FormGroup>
-  //       </FormControl>
-  //     </div>
-  //   );
-  // }
 
   handleFinishStep = classes => {
     return 'finish';
