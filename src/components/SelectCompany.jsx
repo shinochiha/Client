@@ -9,6 +9,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import Select from 'react-select';
 
 import Radio from '@material-ui/core/Radio';
@@ -112,6 +113,8 @@ class SelectCompany extends React.Component {
     }],
     shrink: false,
     slug: '',
+    selectedFile: null,
+    loaded:0,
   }
 
   handleFieldChange = name => event => {
@@ -171,7 +174,7 @@ class SelectCompany extends React.Component {
     axios.get('/destination_companies?search[company.name]=' + value , {
         headers: {
           'Authorization': 'Bearer ' + this.props.state.accessToken,
-          'destination_type': 'subscribe'
+          'destination_type': this.props.state.destType
         }
       }).then(res => {
         const list = res && res.data && res.data.results
@@ -194,7 +197,7 @@ class SelectCompany extends React.Component {
     axios.get('/destination_companies?search[company.name]=', {
         headers: {
           'Authorization': 'Bearer ' + this.props.state.accessToken,
-          'destination_type': 'subscribe'
+          'destination_type': this.props.state.destType
         }
       }).then(res => {
         const list = res && res.data && res.data.results
@@ -223,9 +226,33 @@ class SelectCompany extends React.Component {
     }
   }
 
+  handleselectedFile = event => {
+    this.setState({
+      selectedFile: event.target.files[0],
+      loaded: 0,
+    })
+  }
+
+  handleUpload = () => {
+    const data = new FormData()
+    data.append('file', this.state.selectedFile, this.state.selectedFile.name)
+
+    axios.post('/upload', data, {
+        onUploadProgress: ProgressEvent => {
+          this.setState({
+            loaded: (ProgressEvent.loaded / ProgressEvent.total*100),
+          })
+        },
+      })
+      .then(res => {
+        console.log(res.statusText)
+      })
+
+  }
+
   render() {
     const { destType } = this.props.state
-    console.log(this.props.state.destUrl)
+    console.log(this.props.state.destSlug)
     return (
       <div>
         <Typography style={{ fontSize: 20 }} gutterBottom variant="h5" component="h5">
@@ -259,20 +286,44 @@ class SelectCompany extends React.Component {
         />
         {
           destType === 'onPremise' ?
-          <div>
-          <TextField
-            error={this.state.destUrl.isError}
-            name="destUrl"
-            label="Url"
-            variant="outlined"
-            margin="normal"
-            value={this.props.state.destUrl}
-            onChange={this.handleFieldChange('destUrl')}
-            fullWidth
-          />
-          {this.handleValidationMessage('destUrl')}
+          <div>  
+            <div>
+            <TextField
+              error={this.state.destUrl.isError}
+              name="destUrl"
+              label="Url"
+              variant="outlined"
+              margin="normal"
+              value={this.props.state.destUrl}
+              onChange={this.handleFieldChange('destUrl')}
+              fullWidth
+            />
+            {this.handleValidationMessage('destUrl')}
+            </div> 
+
+            <div style={{marginTop: 15}}>
+            <Select
+                onFocus={this.getDataCompanyFocus}
+                onBlur={this.handleBlur}
+                options={this.state.options}
+                value={this.state.slug}
+                onInputChange={this.getDataCompany}
+                onChange={this.handleChangeCompany}
+                isClearable
+                placeholder=''
+                components={components}
+                textFieldProps={{
+                  label: 'Select Company',
+                  InputLabelProps: {
+                    shrink: this.state.shrink,
+                  },
+                }}
+              />
+            {this.handleValidationMessage('destSlug')}
+            </div> 
           </div> : null
         }
+        
         {
           destType === 'subscribe' ?
           <div style={{marginTop: 15}}>
@@ -300,56 +351,6 @@ class SelectCompany extends React.Component {
         <Typography style={{ fontSize: 20, marginTop: 20 }} gutterBottom variant="h5" component="h5">
           Data Sumber
         </Typography>
-        <FormControlLabel
-          control={
-            <Radio
-              checked={this.props.state.originType === 'zahir6'}
-              onChange={this.handleFieldChange('originType')}
-              value="zahir6"
-              color="primary"
-              name="radio-button-demo"
-              aria-label="zahir6"
-            />
-          }
-          label="Zahir 6"
-        />
-        <FormControlLabel
-          control={
-            <Radio
-              checked={this.props.state.originType === 'zahir5'}
-              onChange={this.handleFieldChange('originType')}
-              value="zahir5"
-              color="primary"
-              name="radio-button-demo"
-              aria-label="zahir5"
-            />
-          }
-          label="Zahir 5"
-        />
-        <FormControlLabel
-          control={
-            <Radio
-              checked={this.props.state.originType === 'zahironline'}
-              onChange={this.handleFieldChange('originType')}
-              value="zahironline"
-              color="primary"
-              name="radio-button-demo"
-              aria-label="zahironline"
-            />
-          }
-          label="Zahir Online"
-        />
-        <TextField
-          error={this.state.originUrl.isError}
-          name="originUrl"
-          label="Url"
-          variant="outlined"
-          margin="normal"
-          value={this.props.state.originUrl}
-          onChange={this.handleFieldChange('originUrl')}
-          fullWidth
-        />
-        {this.handleValidationMessage('originUrl')}
         <TextField
           error={this.state.originSlug.isError}
           name="originSlug"
@@ -358,11 +359,14 @@ class SelectCompany extends React.Component {
           label="Select Company"
           variant="outlined"
           margin="normal"
-          value={this.props.state.originSlug}
-          onChange={this.handleFieldChange('originSlug')}
+          onChange={this.handleselectedFile}
           fullWidth
         />
-        {this.handleValidationMessage('originSlug')}
+
+        <Button variant="contained" color="default" onClick={this.handleUpload}>
+        Upload
+        <CloudUploadIcon />
+        </Button> Progress: {Math.round(this.state.loaded,2) } %
 
         <div style={{ width: '100%', textAlign: 'right' }}>
           <Button onClick={this.handlePrevious} variant="contained" color='default' style={{margin: '10px 10px 0 0'}}>

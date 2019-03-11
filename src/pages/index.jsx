@@ -124,7 +124,7 @@ class Index extends React.Component {
   }
 
   state = {
-    activeStep: 2,
+    activeStep: 0,
     isError: false,
     errorMessage: '',
     email: '',
@@ -136,7 +136,7 @@ class Index extends React.Component {
     destSlug: '',
     originType: 'zahir6',
     originUrl: '',
-    originSlug: '',
+    originSlug: null,
     accounts: false,
     accountCountAll: 0,
     accountCountSynced: 0,
