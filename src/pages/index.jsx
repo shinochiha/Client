@@ -85,41 +85,17 @@ class Index extends React.Component {
       [name]: event.target.checked,
     });
     //  Get Accounts
-    if (name === 'accounts') {
-        if (event.target.checked) {
-          axios.get('/accounts')
-        .then(res => {
-          console.log(res)
-          this.setState({accountCountAll: res.data.count})
-        })
-      } else {
-        this.setState({accountCountAll: 0})
-      }
-    } 
-    // Get Contacts
-    if (name === 'contacts') {
-        if (event.target.checked) {
-          axios.get('/contacts')
-        .then(res => {
-          console.log(res)
-          this.setState({contactCountAll: res.data.count})
-        })
-      } else {
-        this.setState({contactCountAll: 0})
-      }
-    } 
-    // Get Products
-    if (name === 'products') {
-        if (event.target.checked) {
-          axios.get('/products')
-        .then(res => {
-          console.log(res)
-          this.setState({productsCountAll: res.data.count})
-        })
-      } else {
-        this.setState({productsCountAll: 0})
-      }
-    } 
+    // if (name === 'accounts') {
+    //     if (event.target.checked) {
+    //       axios.get('/accounts')
+    //     .then(res => {
+    //       console.log(res)
+    //       this.setState({accountCountAll: res.data.count})
+    //     })
+    //   } else {
+    //     this.setState({accountCountAll: 0})
+    //   }
+    // } 
   };
 
   closeErrorSnackbar = () => {
@@ -138,12 +114,11 @@ class Index extends React.Component {
     accessToken: '',
     refreshToken: '',
     destType: '',
-    destUrl: '',
+    destUrl: 'http://localhost:8888',
     destSlug: '',
     originType: 'zahir6',
     originUrl: '',
     originSlug: '',
-    originSlugFile: '',
     accounts: false,
     accountCountAll: 0,
     accountCountSynced: 0,
@@ -285,8 +260,7 @@ class Index extends React.Component {
   render() {
     const { classes } = this.props;
     console.log(this.state.destSlug)
-    console.log(this.state.originSlug)
-
+    // console.log(this.state.originSlug)
     return (
       <div className={classes.root} >
         <Card className={classes.card} >

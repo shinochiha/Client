@@ -75,7 +75,7 @@ class SelectCompany extends React.Component {
   state = {
     isError: true,
     destUrl: {
-      validation: 'accepted',
+      validation: 'required',
       isError: false,
       errorMessage: [],
     },
@@ -106,11 +106,6 @@ class SelectCompany extends React.Component {
     slug: '',
     selectedFile: null,
     loaded:0,
-    originSlug: {
-      validation: 'required',
-      isError: false,
-      errorMessage: [],
-    }
   }
 
   handleFieldChange = name => event => {
@@ -163,7 +158,7 @@ class SelectCompany extends React.Component {
 
   handleNext = () => {
     let keys = Object.keys(this.state);
-    let error = []
+    // let error = []
     for (var i = 0; i < keys.length; i++) {
       let key = keys[i];
       if(this.state[key]) {
@@ -185,8 +180,17 @@ class SelectCompany extends React.Component {
         }
       }
     }
-    const { originSlug, destSlug, destType } = this.props.state
-    if(originSlug !== null && originSlug !== '' && destSlug !== null && destSlug !== '' && destType !== null && destType !== ''  ) {
+    const { originSlug, destSlug, destType, destUrl } = this.props.state
+    if(
+      originSlug !== null &&
+      originSlug !== '' &&
+      destSlug !== null &&
+      destSlug !== '' &&
+      destType !== null &&
+      destType !== '' &&
+      destUrl !== null &&
+      destUrl !== ''  
+      ) {
       this.props.handler({name: 'activeStep', value: 2});
     }
 
