@@ -276,7 +276,7 @@ class SelectCompany extends React.Component {
 
   render() {
     const { destType } = this.props.state
-    console.log(this.state)
+    // console.log(this.state)
     return (
       <div>
         <Typography style={{ fontSize: 20 }} gutterBottom variant="h5" component="h5">
@@ -383,7 +383,6 @@ class SelectCompany extends React.Component {
           label="Select Company"
           variant="outlined"
           margin="normal"
-          value={this.props.state.originSlugFile}
           onChange={this.handleselectedFile}
           fullWidth
         />
