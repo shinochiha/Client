@@ -138,7 +138,6 @@ class SelectCompany extends React.Component {
       newState.errorMessage = [];
     }
     this.setState({[name]: newState, isError: newState.isError});
-    return errorMessage
   }
 
   handleValidationMessage = name => {
@@ -170,14 +169,27 @@ class SelectCompany extends React.Component {
       if(this.state[key]) {
         if (typeof this.state[key].validation!=='undefined') {
           let value = this.props.state[key];
-          error.push(this.handleValidation({name: key, value: value}));
+          if(!value) {
+            value = ''
+          }
+          let errorMessage = Validation({'attribute': key, 'validation': this.state[key].validation, 'value': value});
+          let newState = {...this.state[key]}
+            if (errorMessage.length>0) {
+              newState.isError = true;
+              newState.errorMessage = errorMessage;
+            } else {
+              newState.isError = false;
+              newState.errorMessage = [];
+            }
+            this.setState({[key]: newState, isError: newState.isError});
         }
       }
     }
-    console.log(error)
-    if (error.length === 0) {
+    const { originSlug, destSlug, destType } = this.props.state
+    if(originSlug !== null && originSlug !== '' && destSlug !== null && destSlug !== '' && destType !== null && destType !== ''  ) {
       this.props.handler({name: 'activeStep', value: 2});
     }
+
 
   }
 
@@ -256,7 +268,8 @@ class SelectCompany extends React.Component {
         },
       })
       .then(res => {
-        this.props.handler({name: 'originSlug', value:res.file })
+        console.log(res)
+        this.props.handler({name: 'originSlug', value:res.data.file })
       })
 
   }
@@ -370,7 +383,7 @@ class SelectCompany extends React.Component {
           label="Select Company"
           variant="outlined"
           margin="normal"
-          value={this.props.state.originSlug}
+          value={this.props.state.originSlugFile}
           onChange={this.handleselectedFile}
           fullWidth
         />

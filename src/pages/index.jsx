@@ -143,6 +143,7 @@ class Index extends React.Component {
     originType: 'zahir6',
     originUrl: '',
     originSlug: '',
+    originSlugFile: '',
     accounts: false,
     accountCountAll: 0,
     accountCountSynced: 0,
