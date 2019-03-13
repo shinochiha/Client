@@ -66,6 +66,12 @@ class Index extends React.Component {
     this.setState({
       [name]: value
     });
+    if (name === 'destType') {
+      this.setState({
+        destSlug: null,
+        originSlug: null
+        })
+    }
   }
 
   handleTextFieldChange = name => event => {
@@ -131,12 +137,12 @@ class Index extends React.Component {
     password: '',
     accessToken: '',
     refreshToken: '',
-    destType: 'subscribe',
+    destType: '',
     destUrl: '',
     destSlug: '',
     originType: 'zahir6',
     originUrl: '',
-    originSlug: null,
+    originSlug: '',
     accounts: false,
     accountCountAll: 0,
     accountCountSynced: 0,
@@ -277,6 +283,8 @@ class Index extends React.Component {
 
   render() {
     const { classes } = this.props;
+    console.log(this.state.destSlug)
+    console.log(this.state.originSlug)
 
     return (
       <div className={classes.root} >

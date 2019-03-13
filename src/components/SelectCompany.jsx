@@ -73,8 +73,9 @@ const components = {
 class SelectCompany extends React.Component {
 
   state = {
+    isError: true,
     destUrl: {
-      validation: 'required',
+      validation: 'accepted',
       isError: false,
       errorMessage: [],
     },
@@ -84,11 +85,6 @@ class SelectCompany extends React.Component {
       errorMessage: [],
       suggestions: [],
       selectedText: '',
-    },
-    originUrl: {
-      validation: 'required',
-      isError: false,
-      errorMessage: [],
     },
     originSlug: {
       validation: 'required',
@@ -102,11 +98,6 @@ class SelectCompany extends React.Component {
       isError: false,
       errorMessage: [],
     },
-    originType: {
-      validation: 'required',
-      isError: false,
-      errorMessage: [],
-    },
     options: [{
       label: '',
       value: ''
@@ -115,15 +106,29 @@ class SelectCompany extends React.Component {
     slug: '',
     selectedFile: null,
     loaded:0,
+    originSlug: {
+      validation: 'required',
+      isError: false,
+      errorMessage: [],
+    }
   }
 
   handleFieldChange = name => event => {
     this.handleValidation({name: name, value: event.target.value});
+    if (name === 'destType') {
+      this.setState({
+        slug: null,
+        shrink: false
+        })
+    }
   }
 
   handleValidation = ({name, value}) => {
     this.props.handler({name: name, value: value});
     let newState = {...this.state[name]}
+    if(!value) {
+      value = ''
+    }
     let errorMessage = Validation({'attribute': name, 'validation': this.state[name].validation, 'value': value});
     if (errorMessage.length>0) {
       newState.isError = true;
@@ -133,6 +138,7 @@ class SelectCompany extends React.Component {
       newState.errorMessage = [];
     }
     this.setState({[name]: newState, isError: newState.isError});
+    return errorMessage
   }
 
   handleValidationMessage = name => {
@@ -158,23 +164,28 @@ class SelectCompany extends React.Component {
 
   handleNext = () => {
     let keys = Object.keys(this.state);
+    let error = []
     for (var i = 0; i < keys.length; i++) {
       let key = keys[i];
-      if (typeof this.state[key].validation!=='undefined') {
-        let value = this.props.state[key];
-        this.handleValidation({name: key, value: value});
+      if(this.state[key]) {
+        if (typeof this.state[key].validation!=='undefined') {
+          let value = this.props.state[key];
+          error.push(this.handleValidation({name: key, value: value}));
+        }
       }
     }
-    if (!this.state.isError) {
-      this.props.handler({name: 'activeStep', value: 1});
+    console.log(error)
+    if (error.length === 0) {
+      this.props.handler({name: 'activeStep', value: 2});
     }
+
   }
 
   getDataCompany = (value) => {
     axios.get('/destination_companies?search[company.name]=' + value , {
         headers: {
           'Authorization': 'Bearer ' + this.props.state.accessToken,
-          'destination_type': this.props.state.destType
+          'destination_type': 'subscribe'
         }
       }).then(res => {
         const list = res && res.data && res.data.results
@@ -197,7 +208,7 @@ class SelectCompany extends React.Component {
     axios.get('/destination_companies?search[company.name]=', {
         headers: {
           'Authorization': 'Bearer ' + this.props.state.accessToken,
-          'destination_type': this.props.state.destType
+          'destination_type': 'subscribe'
         }
       }).then(res => {
         const list = res && res.data && res.data.results
@@ -235,7 +246,7 @@ class SelectCompany extends React.Component {
 
   handleUpload = () => {
     const data = new FormData()
-    data.append('file', this.state.selectedFile, this.state.selectedFile.name)
+    data.append('file', this.state.selectedFile)
 
     axios.post('/upload', data, {
         onUploadProgress: ProgressEvent => {
@@ -245,14 +256,14 @@ class SelectCompany extends React.Component {
         },
       })
       .then(res => {
-        console.log(res.statusText)
+        this.props.handler({name: 'originSlug', value:res.file })
       })
 
   }
 
   render() {
     const { destType } = this.props.state
-    console.log(this.props.state.destSlug)
+    console.log(this.state)
     return (
       <div>
         <Typography style={{ fontSize: 20 }} gutterBottom variant="h5" component="h5">
@@ -359,9 +370,11 @@ class SelectCompany extends React.Component {
           label="Select Company"
           variant="outlined"
           margin="normal"
+          value={this.props.state.originSlug}
           onChange={this.handleselectedFile}
           fullWidth
         />
+        {this.handleValidationMessage('originSlug')}
 
         <Button variant="contained" color="default" onClick={this.handleUpload}>
         Upload
