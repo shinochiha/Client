@@ -1,4 +1,5 @@
 import React from 'react';
+// import axios from 'axios';
 
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -10,7 +11,6 @@ import Checkbox from '@material-ui/core/Checkbox';
 class SelectData extends React.Component {
 
   render() {
-
     const {classes} = this.props
     return (
       <div className={classes.root} >

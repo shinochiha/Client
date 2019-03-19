@@ -1,6 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -72,7 +72,7 @@ class Index extends React.Component {
         originSlug: null
         })
     }
-  }
+  };
 
   handleTextFieldChange = name => event => {
     this.setState({
@@ -80,22 +80,205 @@ class Index extends React.Component {
     });
   };
 
+
   handleCheckboxChange = name => event => {
     this.setState({
       [name]: event.target.checked,
     });
-    //  Get Accounts
-    // if (name === 'accounts') {
-    //     if (event.target.checked) {
-    //       axios.get('/accounts')
-    //     .then(res => {
-    //       console.log(res)
-    //       this.setState({accountCountAll: res.data.count})
-    //     })
-    //   } else {
-    //     this.setState({accountCountAll: 0})
-    //   }
-    // } 
+      // Data - Data
+      // Get Account
+        if (name === 'accounts') {
+        if (event.target.checked) {
+        axios.get('/accounts', {
+          headers: {
+            'database': this.state.originSlug
+          }
+        })
+        .then(res => {
+          this.setState({accountCountAll: res.data.count})
+          console.log(res.data.count)
+        })
+      } else {
+        this.setState({accountCountAll: 0})
+      }
+    } 
+    // Get Contacts
+    if (name === 'contacts') {
+        if (event.target.checked) {
+        axios.get('/contacts', {
+          headers: {
+            'database': this.state.originSlug
+          }
+        })
+        .then(res => {
+          this.setState({contactCountAll: res.data.count})
+          console.log(res.data.count)
+        })
+      } else {
+        this.setState({contactCountAll: 0})
+      }
+    } 
+    //Get Products
+    if (name === 'products') {
+        if (event.target.checked) {
+        axios.get('/products', {
+          headers: {
+            'database': this.state.originSlug
+          }
+        })
+        .then(res => {
+          this.setState({productCountAll: res.data.count})
+          console.log(res.data.count)
+        })
+      } else {
+        this.setState({productCountAll: 0})
+      }
+    } 
+    // Get Taxes
+    if (name === 'taxes') {
+        if (event.target.checked) {
+        axios.get('/taxes', {
+          headers: {
+            'database': this.state.originSlug
+          }
+        })
+        .then(res => {
+          this.setState({taxesCountAll: res.data.count})
+          console.log(res.data.count)
+        })
+      } else {
+        this.setState({taxesCountAll: 0})
+      }
+    } 
+    // Departments
+    if (name === 'departments') {
+        if (event.target.checked) {
+        axios.get('/departments', {
+          headers: {
+            'database': this.state.originSlug
+          }
+        })
+        .then(res => {
+          this.setState({departmentsCountAll: res.data.count})
+          console.log(res.data.count)
+        })
+      } else {
+        this.setState({departmentsCountAll: 0})
+      }
+    } 
+    // Projects
+    if (name === 'projects') {
+        if (event.target.checked) {
+        axios.get('/projects', {
+          headers: {
+            'database': this.state.originSlug
+          }
+        })
+        .then(res => {
+          this.setState({projectsCountAll: res.data.count})
+          console.log(res.data.count)
+        })
+      } else {
+        this.setState({projectsCountAll: 0})
+      }
+    } 
+    // Warehouses
+    if (name === 'warehouses') {
+        if (event.target.checked) {
+        axios.get('/warehouses', {
+          headers: {
+            'database': this.state.originSlug
+          }
+        })
+        .then(res => {
+          this.setState({warehouseCountAll: res.data.count})
+          console.log(res.data.count)
+        })
+      } else {
+        this.setState({warehouseCountAll: 0})
+      }
+    }
+    // Fixes_Assets
+    if (name === 'fixedAssets') {
+        if (event.target.checked) {
+        axios.get('/fixed_assets', {
+          headers: {
+            'database': this.state.originSlug
+          }
+        })
+        .then(res => {
+          this.setState({fixedAssetsCountAll: res.data.count})
+          console.log(res.data.count)
+        })
+      } else {
+        this.setState({fixedAssetsCountAll: 0})
+      }
+    }  
+    // Saldo Awal
+    // Get AccountBeginningBalances
+    if (name === 'accountBeginningBalances') {
+        if (event.target.checked) {
+        axios.get('/account_beginning_balances', {
+          headers: {
+            'database': this.state.originSlug
+          }
+        })
+        .then(res => {
+          this.setState({accountBeginningBalanceCountAll: res.data.count})
+          console.log(res.data.count)
+        })
+      } else {
+        this.setState({accountBeginningBalanceCountAll: 0})
+      }
+    } 
+    // ReceivableBeginningBalances
+    if (name === 'receivableBeginningBalances') {
+        if (event.target.checked) {
+        axios.get('/receivable_beginning_balances', {
+          headers: {
+            'database': this.state.originSlug
+          }
+        })
+        .then(res => {
+          this.setState({receivableBeginningBalancesCountAll: res.data.count})
+          console.log(res.data.count)
+        })
+      } else {
+        this.setState({receivableBeginningBalanceCountAll: 0})
+      }
+    }
+    // PayableBeginningBalances
+    if (name === 'payableBeginningBalances') {
+        if (event.target.checked) {
+        axios.get('/payable_beginning_balances', {
+          headers: {
+            'database': this.state.originSlug
+          }
+        })
+        .then(res => {
+          this.setState({payableBeginningBalancesCountAll: res.data.count})
+          console.log(res.data.count)
+        })
+      } else {
+        this.setState({payableBeginningBalanceCountAll: 0})
+      }
+    }
+    // Inventory
+    if (name === 'inventoryBeginningBalances') {
+        if (event.target.checked) {
+        axios.get('/inventory_beginning_balances', {
+          headers: {
+            'database': this.state.originSlug
+          }
+        })
+        .then(res => {
+          this.setState({inventoryBeginningBalancesCountAll: res.data.count})
+          console.log(res.data.count)
+        })
+      } else {
+        this.setState({inventoryBeginningBalanceCountAll: 0})
+      }
+    }
   };
 
   closeErrorSnackbar = () => {
@@ -106,19 +289,19 @@ class Index extends React.Component {
   }
 
   state = {
-    activeStep: 0,
+    activeStep: 2,
     isError: false,
     errorMessage: '',
     email: '',
     password: '',
     accessToken: '',
     refreshToken: '',
-    destType: '',
+    destType: '', // Subcribe  | OnPremise
     destUrl: 'http://localhost:8888',
-    destSlug: '',
-    originType: 'zahir6',
-    originUrl: '',
-    originSlug: '',
+    destSlug: '', // data company slug
+    originType: 'zahir6', // tidak terpakai
+    originUrl: '', // tidak terpakai
+    originSlug: '', // ini path database nya
     accounts: false,
     accountCountAll: 0,
     accountCountSynced: 0,

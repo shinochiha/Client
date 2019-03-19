@@ -272,8 +272,8 @@ class SelectCompany extends React.Component {
         },
       })
       .then(res => {
-        console.log(res)
         this.props.handler({name: 'originSlug', value:res.data.file })
+        console.log(res.data.file)
       })
 
   }
