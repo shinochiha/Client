@@ -87,7 +87,7 @@ class Index extends React.Component {
   }
 
   state = {
-    activeStep: 2,
+    activeStep: 0,
     isError: false,
     errorMessage: '',
     email: '',
