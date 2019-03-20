@@ -196,7 +196,7 @@ class Index extends React.Component {
           onClick={this.handleNext} >Lanjutkan
         </Button>
       )
-    } else if (this.state.activeStep===this.steps.length) {
+    } else if (this.state.activeStep===2) {
       return (
         <Button
           variant="contained"
