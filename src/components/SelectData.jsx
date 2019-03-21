@@ -10,6 +10,10 @@ import Button from '@material-ui/core/Button';
 
 class SelectData extends React.Component {
 
+  handleNext  = () => {
+    this.props.handler({name: 'activeStep', value: 3});
+  }
+
   handleCheckboxChange = name => event => {
     //Data - data
     // Accounts

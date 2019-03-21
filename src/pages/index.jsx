@@ -87,7 +87,7 @@ class Index extends React.Component {
   }
 
   state = {
-    activeStep: 0,
+    activeStep: 3,
     isError: false,
     errorMessage: '',
     email: '',
@@ -229,8 +229,8 @@ class Index extends React.Component {
     } else if (this.state.activeStep===2) {
       return <SelectData state={this.state} classes={classes} handler={this.handler.bind(this)} />
     } else if (this.state.activeStep===this.steps.length - 1) {
-      // return this.handleFinishStep(classes);
-      return <Status />
+      return <Status state={this.state} classes={classes} handler={this.handler.bind(this)} />
+      // return <Status />
     }
   }
 

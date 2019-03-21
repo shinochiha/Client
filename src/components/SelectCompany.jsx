@@ -158,6 +158,7 @@ class SelectCompany extends React.Component {
 
   handleNext = () => {
     let keys = Object.keys(this.state);
+    console.log(keys)
     // let error = []
     for (var i = 0; i < keys.length; i++) {
       let key = keys[i];
@@ -181,20 +182,9 @@ class SelectCompany extends React.Component {
       }
     }
     const { originSlug, destSlug, destType, destUrl } = this.props.state
-    if(
-      originSlug !== null &&
-      originSlug !== '' &&
-      destSlug !== null &&
-      destSlug !== '' &&
-      destType !== null &&
-      destType !== '' &&
-      destUrl !== null &&
-      destUrl !== ''  
-      ) {
+    if (originSlug !== null && originSlug !== '' && destSlug !== null && destSlug !== '' && destType !== null && destType !== '' && destUrl !== null && destUrl !== '' ) {
       this.props.handler({name: 'activeStep', value: 2});
     }
-
-
   }
 
   getDataCompany = (value) => {
@@ -356,6 +346,7 @@ class SelectCompany extends React.Component {
           destType === 'subscribe' ?
           <div style={{marginTop: 15}}>
           <Select
+              error={this.state.destSlug.isError}
               onFocus={this.getDataCompanyFocus}
               onBlur={this.handleBlur}
               options={this.state.options}

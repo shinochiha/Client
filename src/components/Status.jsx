@@ -1,6 +1,4 @@
 import React from 'react';
-
-import axios from 'axios';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -13,58 +11,34 @@ const styles = {
 
 class Status extends React.Component {
   state = {
-    accounts: [],
-    contacts: [],
-    buffer: 10,
+    completed: 0,
   };
 
   componentDidMount() {
-    axios.get('/accounts')
-    .then(res => {
-      this.setState({accounts: res.data.count})
-    })
-     axios.get('/contacts')
-    .then(res => {
-      this.setState({contacts: res.data.count})
-    })
+    this.timer = setInterval(this.progress, 500);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
   }
 
   progress = () => {
-    const { accounts } = this.state;
-    if (accounts > accounts.length) {
-      this.setState({ accounts: 0, buffer: 10 });
+    const { completed } = this.state;
+    if (completed === 100) {
+      this.setState({ completed: 0 });
     } else {
       const diff = Math.random() * 10;
-      const diff2 = Math.random() * 10;
-      this.setState({ accounts: accounts + diff, buffer: accounts + diff + diff2 });
-    }
-  };
-
-  progress2 = () => {
-    const { contacts } = this.state;
-    if (contacts > contacts.length) {
-      this.setState({ contacts: 0, buffer: 10 });
-    } else {
-      const diff = Math.random() * 10;
-      const diff2 = Math.random() * 10;
-      this.setState({ contacts: contacts + diff, buffer: contacts + diff + diff2 });
+      this.setState({ completed: Math.min(completed + diff, 100) });
     }
   };
 
   render() {
     const { classes } = this.props;
-    const { accounts, contacts,buffer } = this.state;
     return (
       <div className={classes.root}>
-        <p>Accounts: {this.state.accounts}</p>
-        <LinearProgress variant="buffer" value={accounts} valueBuffer={buffer} />
+        <LinearProgress variant="determinate" value={this.state.completed} />
         <br />
-        <LinearProgress color="secondary" variant="buffer" value={accounts} valueBuffer={buffer} />
-        <br />
-        <p>Contacts: {this.state.contacts}</p>
-        <LinearProgress variant="buffer" value={contacts} valueBuffer={buffer} />
-        <br />
-        <LinearProgress color="secondary" variant="buffer" value={contacts} valueBuffer={buffer} />
+        <LinearProgress color="secondary" variant="determinate" value={this.state.completed} />
       </div>
     );
   }
