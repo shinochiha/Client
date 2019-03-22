@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CloseIcon from "@material-ui/icons/Close";
@@ -87,7 +87,7 @@ class Index extends React.Component {
   }
 
   state = {
-    activeStep: 3,
+    activeStep: 0,
     isError: false,
     errorMessage: '',
     email: '',
@@ -100,6 +100,8 @@ class Index extends React.Component {
     originType: 'zahir6', // tidak terpakai
     originUrl: '', // tidak terpakai
     originSlug: '', // ini path database nya
+    all: false,
+    loading: false, 
     accounts: false,
     accountCountAll: 0,
     accountCountSynced: 0,
@@ -165,72 +167,15 @@ class Index extends React.Component {
     'Status',
   ];
 
-  handleNext = () => {
-    if (this.state.activeStep<this.steps.length) {
-      this.setState(state => ({
-        activeStep: state.activeStep + 1,
-      }));
-    }
-  };
-
-  handleBack = () => {
-    if (this.state.activeStep>0) {
-      this.setState(state => ({
-        activeStep: state.activeStep - 1,
-      }));
-    }
-  };
-
-  handleReset = () => {
-    this.setState({
-      activeStep: 0,
-    });
-  };
-
-  handleStepButton = classes => {
-    if (this.state.activeStep===0) {
-      return (
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={this.handleNext} >Lanjutkan
-        </Button>
-      )
-    } else if (this.state.activeStep===2) {
-      return (
-        <Button
-          variant="contained"
-          onClick={this.handleReset} >Reset
-        </Button>
-      )
-    } else {
-      return (
-        <div>
-          <Button
-            variant="contained"
-            onClick={this.handleBack}
-            className={classes.backButton} >Kembali
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={this.handleNext} >{this.state.activeStep === this.steps.length - 1 ? 'Proses' : 'Lanjutkan'}
-          </Button>
-        </div>
-      )
-    }
-  };
-
   handleStepContent = classes => {
     if (this.state.activeStep===0) {
       return <Login state={this.state} handler={this.handler.bind(this)}/>
     } else if (this.state.activeStep===1) {
       return <SelectCompany state={this.state} handler={this.handler.bind(this)}/>
     } else if (this.state.activeStep===2) {
-      return <SelectData state={this.state} classes={classes} handler={this.handler.bind(this)} />
+      return <SelectData steps={this.steps} state={this.state} classes={classes} handler={this.handler.bind(this)} />
     } else if (this.state.activeStep===this.steps.length - 1) {
-      return <Status state={this.state} classes={classes} handler={this.handler.bind(this)} />
-      // return <Status />
+      return <Status state={this.state} handler={this.handler.bind(this)} />
     }
   }
 
@@ -240,7 +185,7 @@ class Index extends React.Component {
 
   render() {
     const { classes } = this.props;
-    console.log(this.state.destSlug)
+    // console.log(this.state.destSlug)
     // console.log(this.state.originSlug)
     return (
       <div className={classes.root} >

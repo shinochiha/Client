@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React from 'react';
+import { css } from '@emotion/core';
 
 import Button from '@material-ui/core/Button';
 import FormHelperText from '@material-ui/core/FormHelperText';
@@ -9,8 +10,15 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 import Validation from './Validation';
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
 
 class Login extends React.Component {
 
@@ -90,6 +98,7 @@ class Login extends React.Component {
           props.handler({name: 'isError', value: true})
           props.handler({name: 'errorMessage', value: error.response.data.error_description})
         });
+        props.handler({'name': 'loading', 'value': true})
     }
   }
 
@@ -132,8 +141,19 @@ class Login extends React.Component {
         />
         {this.handleValidationMessage('password')}
         <div style={{ width: '100%', textAlign: 'right' }}>
-          <Button onClick={this.handleNext} variant="contained" color='primary' style={{margin: '10px 0 0 0'}}>
-            Lanjutkan
+          <Button 
+            onClick={this.handleNext}
+            variant="contained"
+            color='primary'
+            style={{margin: '10px 0 0 0'}}>
+            Lanjutkan &nbsp;  
+            <ClipLoader
+              css={override}
+              sizeUnit={"px"}
+              size={20}
+              loading={this.props.state.loading}
+              color={'#123abc'}>
+            </ClipLoader>
           </Button>
         </div>
       </div>

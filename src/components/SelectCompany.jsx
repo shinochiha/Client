@@ -154,11 +154,11 @@ class SelectCompany extends React.Component {
 
   handlePrevious = () => {
     this.props.handler({name: 'activeStep', value: 0});
+    this.props.handler({'name': 'loading', 'value': false})
   }
 
   handleNext = () => {
     let keys = Object.keys(this.state);
-    console.log(keys)
     // let error = []
     for (var i = 0; i < keys.length; i++) {
       let key = keys[i];

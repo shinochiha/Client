@@ -23,6 +23,7 @@
     "react-dom": "^16.8.3",
     "react-scripts": "^2.1.5",
     "react-select": "^2.4.1",
+    "react-spinners": "^0.5.3",
     "validator": "^10.11.0"
   },
   "browserslist": [

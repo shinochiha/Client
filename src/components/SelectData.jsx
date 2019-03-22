@@ -10,14 +10,77 @@ import Button from '@material-ui/core/Button';
 
 class SelectData extends React.Component {
 
-  handleNext  = () => {
-    this.props.handler({name: 'activeStep', value: 3});
-  }
+  handleNext = () => {
+    if (this.props.state.activeStep<this.props.steps.length) {
+        this.props.handler({
+          name: 'activeStep',
+          value: this.props.state.activeStep + 1
+        })
+    }
+  };
+
+  // handleBack = () => {
+  //   if (this.props.state.activeStep > 0) {
+  //     this.props.handler({
+  //       name: 'activeStep',
+  //       value: this.props.state.activeStep - 1,
+  //     })
+  //   }
+  // };
+
+  handleReset = () => {
+    this.props.handler({
+      name: 'activeStep',
+      value: 0
+    })
+  };
+
+  // handleStepButton = classes => {
+  //   if (this.props.state.activeStep===0) {
+  //     return (
+  //       <Button
+  //         variant="contained"
+  //         color="primary"
+  //         onClick={this.handleNext} >Lanjutkan
+  //       </Button>
+  //     )
+  //   } else if (this.props.state.activeStep===this.steps.length) {
+  //     return (
+  //       <Button
+  //         variant="contained"
+  //         onClick={this.handleReset} >Reset
+  //       </Button>
+  //     )
+  //   } else {
+  //     return (
+  //       <div>
+  //         <Button
+  //           variant="contained"
+  //           onClick={this.handleBack}
+  //           className={classes.backButton} >Kembali
+  //         </Button>
+  //         <Button
+  //           variant="contained"
+  //           color="primary"
+  //           onClick={this.handleNext} >{this.props.state.activeStep === this.props.steps.length - 1 ? 'Proses' : 'Lanjutkan'}
+  //         </Button>
+  //       </div>
+  //     )
+  //   }
+  // };
 
   handleCheckboxChange = name => event => {
     //Data - data
+    // Pilih Semua
+    if (name === 'all') {
+      if(event.target.checked) {
+        this.props.handler({name: 'all', value: true})
+      } else {
+        this.props.handler({name: 'all', value: true})
+      }
+    }
     // Accounts
-    if(name === 'accounts' || name === 'accountBeginningBalances' || name === 'receivableBeginningBalances' || name === 'payableBeginningBalances') {
+    if(name === 'accounts' || name === 'accountBeginningBalances' || name === 'receivableBeginningBalances' || name === 'payableBeginningBalances' || name === 'all') {
       if(event.target.checked) {
         this.props.handler({name: 'accounts',value: true})
         axios.get('/accounts', {
@@ -34,9 +97,9 @@ class SelectData extends React.Component {
         this.props.handler({name: 'accountCountAll', value: 0})
       }
     }
-      
+
     // Contacts
-    if(name === 'contacts' || name === 'receivableBeginningBalances' || name === 'payableBeginningBalances') {
+    if(name === 'contacts' || name === 'receivableBeginningBalances' || name === 'payableBeginningBalances' || name === 'all') {
       if(event.target.checked) {
         this.props.handler({name: 'contacts',value: true})
         axios.get('/contacts', {
@@ -54,7 +117,7 @@ class SelectData extends React.Component {
       }
     }
     //Get Products
-    if(name === 'products' || name === 'inventoryBeginningBalances') {
+    if(name === 'products' || name === 'inventoryBeginningBalances' || name === 'all') {
       if(event.target.checked) {
         this.props.handler({name: 'products',value: true})
         axios.get('/products', {
@@ -72,7 +135,7 @@ class SelectData extends React.Component {
       }
     }
     // Get Taxes
-    if(name === 'taxes') {
+    if(name === 'taxes' || name === 'all') {
       if(event.target.checked) {
         this.props.handler({name: 'taxes',value: true})
         axios.get('/taxes', {
@@ -90,7 +153,7 @@ class SelectData extends React.Component {
       }
     }
     // Departments
-    if(name === 'departments' || name === 'accountBeginningBalances' || name === 'receivableBeginningBalances' || name === 'payableBeginningBalances') {
+    if(name === 'departments' || name === 'accountBeginningBalances' || name === 'receivableBeginningBalances' || name === 'payableBeginningBalances' || name === 'all') {
      if(event.target.checked) {
         this.props.handler({name: 'departments',value: true})
         axios.get('/departments', {
@@ -108,7 +171,7 @@ class SelectData extends React.Component {
       }
     }
     // Projects
-    if(name === 'accountBeginningBalances' || name === 'projects' || name === 'receivableBeginningBalances' || name === 'payableBeginningBalances') {
+    if(name === 'accountBeginningBalances' || name === 'projects' || name === 'receivableBeginningBalances' || name === 'payableBeginningBalances' || name === 'all') {
       if(event.target.checked) {
         this.props.handler({name: 'projects',value: true})
         axios.get('/projects', {
@@ -126,7 +189,7 @@ class SelectData extends React.Component {
       }
     }
     // Warehouses
-    if(name === 'warehouses' || name === 'inventoryBeginningBalances') {
+    if(name === 'warehouses' || name === 'inventoryBeginningBalances' || name === 'all') {
       if(event.target.checked) {
         this.props.handler({name: 'warehouses',value: true})
         axios.get('/warehouses', {
@@ -144,7 +207,7 @@ class SelectData extends React.Component {
       }
     }
     // Fixes_Assets
-    if(name === 'fixedAssets') {
+    if(name === 'fixedAssets' || name === 'all') {
       if(event.target.checked) {
         this.props.handler({name: 'fixedAssets',value: true})
         axios.get('/fixed_assets', {
@@ -163,7 +226,7 @@ class SelectData extends React.Component {
     }
     // Saldo Awal
     // Get AccountBeginningBalances
-    if(name === 'accountBeginningBalances') {
+    if(name === 'accountBeginningBalances' || name === 'all') {
       if(event.target.checked) {
         this.props.handler({name: 'accountBeginningBalances',value: true})
         axios.get('/account_beginning_balances', {
@@ -181,7 +244,7 @@ class SelectData extends React.Component {
       }
     }
     // ReceivableBeginningBalances
-    if(name === 'receivableBeginningBalances') {
+    if(name === 'receivableBeginningBalances' || name === 'all') {
       if(event.target.checked) {
         this.props.handler({name: 'receivableBeginningBalances',value: true})
         axios.get('/receivable_beginning_balances', {
@@ -199,7 +262,7 @@ class SelectData extends React.Component {
       }
     }
     // PayableBeginningBalances
-    if(name === 'payableBeginningBalances') {
+    if(name === 'payableBeginningBalances' || name === 'all') {
       if(event.target.checked) {
         this.props.handler({name: 'payableBeginningBalances',value: true})
         axios.get('/payable_beginning_balances', {
@@ -217,7 +280,7 @@ class SelectData extends React.Component {
       }
     }
     // Sales
-    if(name === 'salesPrepaymentBeginningBalances') {
+    if(name === 'salesPrepaymentBeginningBalances' || name === 'all') {
       if(event.target.checked) {
         this.props.handler({name: 'salesPrepaymentBeginningBalances',value: true})
         axios.get('/sales_prepayment_beginning_balances', {
@@ -235,7 +298,7 @@ class SelectData extends React.Component {
       }
     }
     // Purchases
-    if(name === 'purchasesPrepaymentBeginningBalances') {
+    if(name === 'purchasesPrepaymentBeginningBalances' || name === 'all') {
       if(event.target.checked) {
         this.props.handler({name: 'purchasesPrepaymentBeginningBalances',value: true})
         axios.get('/purchases_prepayment_beginning_balances', {
@@ -253,7 +316,7 @@ class SelectData extends React.Component {
       }
     }
     // Inventory
-    if(name === 'inventoryBeginningBalances') {
+    if(name === 'inventoryBeginningBalances' || name === 'all') {
       if(event.target.checked) {
         this.props.handler({name: 'inventoryBeginningBalances',value: true})
         axios.get('/inventory_beginning_balances', {
@@ -280,6 +343,14 @@ class SelectData extends React.Component {
           <FormGroup>
             <FormLabel>Data-data</FormLabel>
             <FormGroup>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  onChange={this.handleCheckboxChange('all')}
+                  value='all' />
+              }
+              label="Pilih Semua"
+            />
             <FormControlLabel
               control={
                 <Checkbox
@@ -426,6 +497,9 @@ class SelectData extends React.Component {
           </FormGroup>
         </FormControl>
          <div style={{ width: '100%', textAlign: 'right' }}>
+          <Button onClick={this.handleBack} variant="contained" color='default' style={{margin: '10px 10px 0 0'}}>
+            Kembali
+          </Button>
           <Button onClick={this.handleNext} variant="contained" color='primary' style={{margin: '10px 0 0 0'}}>
             Lanjutkan
           </Button>
