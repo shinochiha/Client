@@ -95,7 +95,7 @@ class Index extends React.Component {
     accessToken: '',
     refreshToken: '',
     destType: '', // Subcribe  | OnPremise
-    destUrl: 'http://localhost:8888',
+    destUrl: '',
     destSlug: '', // data company slug
     originType: 'zahir6', // tidak terpakai
     originUrl: '', // tidak terpakai
