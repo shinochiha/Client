@@ -8,6 +8,9 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+
 class SelectData extends React.Component {
 
   handleNext = () => {
@@ -80,7 +83,7 @@ class SelectData extends React.Component {
       }
     }
     // Accounts
-    if(name === 'accounts' || name === 'accountBeginningBalances' || name === 'receivableBeginningBalances' || name === 'payableBeginningBalances' || name === 'all') {
+    if(name === 'accounts' || name === 'accountBeginningBalances' || name === 'receivableBeginningBalances' || name === 'payableBeginningBalances' || name === 'salesPrepaymentBeginningBalances' || name === 'purchasesPrepaymentBeginningBalances' || name === 'all') {
       if(event.target.checked) {
         this.props.handler({name: 'accounts',value: true})
         axios.get('/accounts', {
@@ -99,7 +102,7 @@ class SelectData extends React.Component {
     }
 
     // Contacts
-    if(name === 'contacts' || name === 'receivableBeginningBalances' || name === 'payableBeginningBalances' || name === 'all') {
+    if(name === 'contacts' || name === 'receivableBeginningBalances' || name === 'payableBeginningBalances' || name === 'salesPrepaymentBeginningBalances' || name === 'purchasesPrepaymentBeginningBalances' || name === 'all') {
       if(event.target.checked) {
         this.props.handler({name: 'contacts',value: true})
         axios.get('/contacts', {
@@ -153,7 +156,7 @@ class SelectData extends React.Component {
       }
     }
     // Departments
-    if(name === 'departments' || name === 'accountBeginningBalances' || name === 'receivableBeginningBalances' || name === 'payableBeginningBalances' || name === 'all') {
+    if(name === 'departments' || name === 'accountBeginningBalances' || name === 'receivableBeginningBalances' || name === 'payableBeginningBalances' || name === 'salesPrepaymentBeginningBalances' || name === 'purchasesPrepaymentBeginningBalances' || name === 'all') {
      if(event.target.checked) {
         this.props.handler({name: 'departments',value: true})
         axios.get('/departments', {
@@ -171,7 +174,7 @@ class SelectData extends React.Component {
       }
     }
     // Projects
-    if(name === 'accountBeginningBalances' || name === 'projects' || name === 'receivableBeginningBalances' || name === 'payableBeginningBalances' || name === 'all') {
+    if(name === 'accountBeginningBalances' || name === 'projects' || name === 'receivableBeginningBalances' || name === 'payableBeginningBalances' || name === 'salesPrepaymentBeginningBalances' || name === 'purchasesPrepaymentBeginningBalances' || name === 'all') {
       if(event.target.checked) {
         this.props.handler({name: 'projects',value: true})
         axios.get('/projects', {
@@ -280,7 +283,7 @@ class SelectData extends React.Component {
       }
     }
     // Sales
-    if(name === 'salesPrepaymentBeginningBalances' || name === 'all') {
+    if(name === 'salesPrepaymentBeginningBalances' || name === 'all' ) {
       if(event.target.checked) {
         this.props.handler({name: 'salesPrepaymentBeginningBalances',value: true})
         axios.get('/sales_prepayment_beginning_balances', {
@@ -347,7 +350,11 @@ class SelectData extends React.Component {
               control={
                 <Checkbox
                   onChange={this.handleCheckboxChange('all')}
-                  value='all' />
+                  value='all'
+                  color="primary" 
+                  icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
+                  checkedIcon={<CheckBoxIcon fontSize="small" />}
+                  />
               }
               label="Pilih Semua"
             />

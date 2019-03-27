@@ -2,6 +2,8 @@ import axios from 'axios';
 
 import React from 'react';
 
+import { css } from '@emotion/core';
+
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import FormHelperText from '@material-ui/core/FormHelperText';
@@ -13,9 +15,15 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import Select from 'react-select';
 
 import Radio from '@material-ui/core/Radio';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 import Validation from './Validation';
 
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
 
 function inputComponent({ inputRef, ...props }) {
   return <div style={{display: 'flex', justifyContent: 'space-between', padding: 10}} ref={inputRef} {...props} />;
@@ -270,7 +278,7 @@ class SelectCompany extends React.Component {
 
   render() {
     const { destType } = this.props.state
-    // console.log(this.state)
+    console.log(this.props.state.destSlug)
     return (
       <div>
         <Typography style={{ fontSize: 20 }} gutterBottom variant="h5" component="h5">
@@ -384,9 +392,17 @@ class SelectCompany extends React.Component {
         {this.handleValidationMessage('originSlug')}
 
         <Button variant="contained" color="default" onClick={this.handleUpload}>
-        Upload
-        <CloudUploadIcon />
-        </Button> Progress: {Math.round(this.state.loaded,2) } %
+        Upload &nbsp;
+        <CloudUploadIcon /> &nbsp;&nbsp;
+        <ClipLoader
+          css={override}
+          sizeUnit={"px"}
+          size={20}
+          loading={this.state.loaded}
+          color={'#123abc'}>
+        </ClipLoader> &nbsp;
+         {Math.round(this.state.loaded,2) } %
+        </Button> 
 
         <div style={{ width: '100%', textAlign: 'right' }}>
           <Button onClick={this.handlePrevious} variant="contained" color='default' style={{margin: '10px 10px 0 0'}}>
