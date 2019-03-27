@@ -65,14 +65,14 @@ class Status extends React.Component {
   handleNext = () => {
    if (this.props.state.accounts === true) {
       axios.post('/accounts', {
-        skip: 1,
+        skip: 12,
         token: this.props.state.accessToken,
           origin: {
               database: this.props.state.originSlug
           },
           destination: {
               url: this.props.state.destUrl,
-              slug: 'a'
+              slug: this.props.state.destSlug
           }
       })
       .then(res => {

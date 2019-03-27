@@ -103,6 +103,7 @@ class Login extends React.Component {
   }
 
   render() {
+    const { errorMessage } = this.props.state
     return (
       <div>
         <Typography style={{ fontSize: 20, textAlign: 'center' }} gutterBottom variant="h5" component="h5">
@@ -141,12 +142,14 @@ class Login extends React.Component {
         />
         {this.handleValidationMessage('password')}
         <div style={{ width: '100%', textAlign: 'right' }}>
+        {
+          errorMessage === '' ?
           <Button 
             onClick={this.handleNext}
             variant="contained"
             color='primary'
             style={{margin: '10px 0 0 0'}}>
-            Lanjutkan &nbsp;  
+            Lanjutkan &nbsp; 
             <ClipLoader
               css={override}
               sizeUnit={"px"}
@@ -155,6 +158,15 @@ class Login extends React.Component {
               color={'#123abc'}>
             </ClipLoader>
           </Button>
+          : 
+          <Button 
+            onClick={this.handleNext}
+            variant="contained"
+            color='primary'
+            style={{margin: '10px 0 0 0'}}>
+            Lanjutkan
+          </Button>
+        }
         </div>
       </div>
     );
