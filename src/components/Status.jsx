@@ -15,8 +15,10 @@ class Status extends React.Component {
   state = {
     skip: 0,
     accounts: [],
-    loading: 0
-  };
+    contacts: [],
+    loadingAccount: 0,
+    loadingContact: 0,
+};
 
     handleBack = () => {
     if (this.props.state.activeStep > 0) {
@@ -61,34 +63,56 @@ class Status extends React.Component {
       })
       .then(res => {
       this.setState({
-        loading: this.state.loading + 1
+        loadingAccount: this.state.loadingAccount + 1
       })
         this.props.handler({'name':'accountCountSynced', 'value': this.props.state.accountCountSynced + 1})
         console.log(res.data)
       })
       .catch(err => {
       this.setState({
-        loading: this.state.loading + 1
+        loadingAccount: this.state.loading + 1
       })
         this.props.handler({'name':'accountCountFailed', 'value': this.props.state.accountCountFailed + 1})
         console.log(err.response.data.response.error.message);
       });
     }
   }
+
+    if (this.props.state.contacts === true) {
+    // Contacts
+    for (let i = 0; i < this.props.state.contactCountAll; i++) {
+      axios.post('/contacts', {
+        skip: i,
+        token: this.props.state.accessToken,
+          origin: {
+              database: this.props.state.originSlug
+          },
+          destination: {
+              type: this.props.state.destType,
+              url: this.props.state.destUrl,
+              slug: 'a'
+          }
+      })
+      .then(res => {
+      this.setState({
+        loadingContact: this.state.loadingContact + 1
+      })
+        this.props.handler({'name':'contactCountSynced', 'value': this.props.state.contactCountSynced + 1})
+        console.log(res.data)
+      })
+      .catch(err => {
+      this.setState({
+        loadingContact: this.state.loadingContact + 1
+      })
+        this.props.handler({'name':'contactCountFailed', 'value': this.props.state.contactCountFailed + 1})
+        console.log(err.response.data.response.error.message);
+      });
+    }
+  }
 };
 
-  // progress = () => {
-  //   const { accounts } = this.state;
-  //   if (accounts > 100) {
-  //     this.setState({ accounts: 0, buffer: 10});
-  //   } else {
-  //     const diff = Math.random() * 10;
-  //     const diff2 = Math.random() * 10;
-  //      this.setState({ accounts: accounts + diff, buffer: accounts + diff + diff2 });
-  //   }
-  // };
   disableButton = () => {
-    if (this.state.loading !== this.props.state.accountCountAll) {
+    if (this.state.loadingAccount !== this.props.state.accountCountAll && this.state.loadingContact !== this.props.state.contactCountAll) {
       return false
     } else {
       return true
@@ -97,14 +121,21 @@ class Status extends React.Component {
   render() {
     const { classes } = this.props;
     const { accountCountAll, accountCountSynced, accountCountFailed } = this.props.state;
-    const completed = this.state.loading / accountCountAll * 100
+    const { contactCountAll, contactCountSynced, contactCountFailed } = this.props.state;
+    const accounts = this.state.loadingAccount / accountCountAll * 100
+    const contacts = this.state.loadingContact / contactCountAll * 100
     return (
       <div className={classes.root}>
         <h2>Data - Data</h2>
-        <p><b>Akun:</b> {this.state.loading} / {accountCountAll}</p>
+        <p><b>Akun:</b> {this.state.loadingAccount} / {accountCountAll}</p>
         <p><b>Success:</b> {accountCountSynced}</p>
-        <p><b>Failed:</b> <a href="#">{accountCountFailed}</a></p>
-        <LinearProgress variant="buffer" value={completed} valueBuffer={this.state.loading} />
+        <p><b>Failed:</b> <a href="https://www.npmjs.com/package/export-to-csv">{accountCountFailed}</a></p>
+        <LinearProgress variant="buffer" value={accounts} valueBuffer={this.state.loadingAccount} />
+        <br/>
+        <p><b>Akun:</b> {this.state.loadingContact} / {contactCountAll}</p>
+        <p><b>Success:</b> {contactCountSynced}</p>
+        <p><b>Failed:</b> <a href="https://www.npmjs.com/package/export-to-csv">{contactCountFailed}</a></p>
+        <LinearProgress variant="buffer" value={contacts} valueBuffer={this.state.loadingContact} />
           <div style={{ width: '100%', textAlign: 'right' }}>
             <Button disabled={this.disableButton()} onClick={this.handleNext} variant="contained" color='primary' style={{margin: '10px 0 0 0'}}>
               Prosess
