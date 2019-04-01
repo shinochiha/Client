@@ -65,12 +65,12 @@ class Index extends React.Component {
     this.setState({
       [name]: value
     });
-    if (name === 'destType') {
-      this.setState({
-        destSlug: null,
-        originSlug: null
-        })
-    }
+    // if (name === 'destType') {
+    //   this.setState({
+    //     destSlug: null,
+    //     originSlug: null
+    //     })
+    // }
   };
 
   handleTextFieldChange = name => event => {
@@ -95,7 +95,7 @@ class Index extends React.Component {
     accessToken: '',
     refreshToken: '',
     destType: '', // Subcribe  | OnPremise
-    destUrl: '',
+    destUrl: 'http://localhost:8888',
     destSlug: '', // data company slug
     originSlug: '', // ini path database nya
     all: false,

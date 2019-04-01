@@ -114,6 +114,7 @@ class SelectCompany extends React.Component {
     slug: '',
     selectedFile: null,
     loaded:0,
+    loading:false
   }
 
   handleFieldChange = name => event => {
@@ -261,7 +262,9 @@ class SelectCompany extends React.Component {
   handleUpload = () => {
     const data = new FormData()
     data.append('file', this.state.selectedFile)
-
+    this.setState({
+      loading:true
+    })
     axios.post('/upload', data, {
         onUploadProgress: ProgressEvent => {
           this.setState({
@@ -272,13 +275,21 @@ class SelectCompany extends React.Component {
       .then(res => {
         this.props.handler({name: 'originSlug', value:res.data.file })
         console.log(res.data.file)
+        this.setState({
+          loading: false
+        })
+      })
+      .catch(err => {
+        this.setState({
+          loading: false
+        })
       })
 
   }
 
   render() {
     const { destType } = this.props.state
-    console.log(this.props.state.destSlug)
+    // console.log(this.props.state.destSlug)
     return (
       <div>
         <Typography style={{ fontSize: 20 }} gutterBottom variant="h5" component="h5">
@@ -392,16 +403,16 @@ class SelectCompany extends React.Component {
         {this.handleValidationMessage('originSlug')}
 
         <Button variant="contained" color="default" onClick={this.handleUpload}>
-        Upload &nbsp;
-        <CloudUploadIcon /> &nbsp;&nbsp;
-        <ClipLoader
-          css={override}
-          sizeUnit={"px"}
-          size={20}
-          loading={this.state.loaded}
-          color={'#123abc'}>
-        </ClipLoader> &nbsp;
-         {Math.round(this.state.loaded,2) } %
+          Upload &nbsp;
+          <CloudUploadIcon /> &nbsp;&nbsp;
+          <ClipLoader
+            css={override}
+            sizeUnit={"px"}
+            size={20}
+            loading={this.state.loading}
+            color={'#123abc'}>
+          </ClipLoader> &nbsp;
+           {Math.round(this.state.loaded,2) } %
         </Button> 
 
         <div style={{ width: '100%', textAlign: 'right' }}>

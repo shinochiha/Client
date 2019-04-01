@@ -13,20 +13,9 @@ const styles = {
 
 class Status extends React.Component {
   state = {
+    skip: 0,
     accounts: [],
-    // contacts: [],
-    // products: [],
-    // departments: [],
-    // projects: [],
-    // taxes: [],
-    // warehouses: [],
-    // fixedAssets: [],
-    // accountBeginningBalances: [],
-    // receivableBeginningBalances: [],
-    // payableBeginningBalances: [],
-    // salesPrepaymentBeginningBalances: [],
-    // purchasesPrepaymentBeginningBalances: [],
-    // inventoryBeginningBalances: []
+    loading: 0
   };
 
     handleBack = () => {
@@ -41,72 +30,83 @@ class Status extends React.Component {
   componentDidMount() {
     this.setState({
       accounts : this.props.state.accountCountAll,
-    //   contacts: this.props.state.contactCountAll, 
-    //   products: this.props.state.productCountAll, 
-    //   departments: this.props.state.departmentCountAll,
-    //   projects: this.props.state.projectCountAll,
-    //   taxes: this.props.state.taxesCountAll,
-    //   warehouses: this.props.state.warehouseCountAll,
-    //   fixedAssets: this.props.state.fixedAssetCountAll,
-    //   accountBeginningBalances: this.props.state.accountBeginningBalanceCountAll,
-    //   receivableBeginningBalances: this.props.state.receivableBeginningBalanceCountAll,
-    //   payableBeginningBalances: this.props.state.payableBeginningBalanceCountAll,
-    //   salesPrepaymentBeginningBalances: this.props.state.salesPrepaymentBeginningBalanceCountAll,
-    //   purchasesPrepaymentBeginningBalances: this.props.state.purchasesPrepaymentBeginningBalanceCountAll, 
-    //   inventoryBeginningBalances: this.props.state.inventoryBeginningBalanceCountAll
+      contacts : this.props.state.contactCountAll,
     })
-    this.timer = setInterval(this.progress, 500);
+    // this.timer = setInterval(this.progress, 500);
   }
 
-  componentWillUnmount() {
-    clearInterval(this.timer);
-  }
+  // componentWillUnmount() {
+  //   clearInterval(this.timer);
+  // }
 
   handleNext = () => {
+  let skip = this.state.skip + 1
+  this.setState({
+    skip: skip
+  })
    if (this.props.state.accounts === true) {
+    // Accounts
+    for (let i = 0; i < this.props.state.accountCountAll; i++) {
       axios.post('/accounts', {
-        skip: 12,
+        skip: i,
         token: this.props.state.accessToken,
           origin: {
               database: this.props.state.originSlug
           },
           destination: {
+              type: this.props.state.destType,
               url: this.props.state.destUrl,
-              slug: this.props.state.destSlug
+              slug: 'a'
           }
       })
       .then(res => {
-        console.log(res.data.data.name)
+      this.setState({
+        loading: this.state.loading + 1
       })
-      .catch(error => {
-        console.log(error);
+        this.props.handler({'name':'accountCountSynced', 'value': this.props.state.accountCountSynced + 1})
+        console.log(res.data)
+      })
+      .catch(err => {
+      this.setState({
+        loading: this.state.loading + 1
+      })
+        this.props.handler({'name':'accountCountFailed', 'value': this.props.state.accountCountFailed + 1})
+        console.log(err.response.data.response.error.message);
       });
     }
-  };
+  }
+};
 
-  progress = () => {
-    const { accounts } = this.state;
-    if (accounts === 100) {
-      this.setState({ accounts: 0});
+  // progress = () => {
+  //   const { accounts } = this.state;
+  //   if (accounts > 100) {
+  //     this.setState({ accounts: 0, buffer: 10});
+  //   } else {
+  //     const diff = Math.random() * 10;
+  //     const diff2 = Math.random() * 10;
+  //      this.setState({ accounts: accounts + diff, buffer: accounts + diff + diff2 });
+  //   }
+  // };
+  disableButton = () => {
+    if (this.state.loading !== this.props.state.accountCountAll) {
+      return false
     } else {
-      const diff = Math.random() * 10;
-      this.setState({ accounts: Math.min(accounts + diff, 100) });
+      return true
     }
-  };
-
+  }
   render() {
     const { classes } = this.props;
-    const { accountCountAll } = this.props.state;
-    const { accounts } = this.state;
+    const { accountCountAll, accountCountSynced, accountCountFailed } = this.props.state;
+    const completed = this.state.loading / accountCountAll * 100
     return (
       <div className={classes.root}>
         <h2>Data - Data</h2>
-        <p>Akun: {accountCountAll}</p>
-        <LinearProgress variant="determinate" value={accounts} />
-        <br />
-        <LinearProgress color="secondary" variant="determinate" value={accounts / 2}/>
+        <p><b>Akun:</b> {this.state.loading} / {accountCountAll}</p>
+        <p><b>Success:</b> {accountCountSynced}</p>
+        <p><b>Failed:</b> <a href="#">{accountCountFailed}</a></p>
+        <LinearProgress variant="buffer" value={completed} valueBuffer={this.state.loading} />
           <div style={{ width: '100%', textAlign: 'right' }}>
-            <Button onClick={this.handleNext} variant="contained" color='primary' style={{margin: '10px 0 0 0'}}>
+            <Button disabled={this.disableButton()} onClick={this.handleNext} variant="contained" color='primary' style={{margin: '10px 0 0 0'}}>
               Prosess
             </Button>
           </div>

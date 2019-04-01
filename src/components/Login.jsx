@@ -85,6 +85,7 @@ class Login extends React.Component {
     if (!this.state.isError) {
       let token = btoa(this.props.state.email+':'+this.props.state.password)
       let props = this.props
+      props.handler({'name': 'loading', 'value': true})
       axios.post('/auth', {}, {
           headers: {'Authorization': 'Basic '+ token}
         })
@@ -93,12 +94,13 @@ class Login extends React.Component {
           props.handler({name: 'activeStep', value: 1})
           props.handler({name: 'accessToken', value: accessToken.access_token})
           props.handler({name: 'refreshToken', value: accessToken.refresh_token})
+          props.handler({'name': 'loading', 'value': false})
         })
         .catch(function (error) {
+          props.handler({'name': 'loading', 'value': false})
           props.handler({name: 'isError', value: true})
           props.handler({name: 'errorMessage', value: error.response.data.error_description})
         });
-        props.handler({'name': 'loading', 'value': true})
     }
   }
 
