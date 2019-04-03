@@ -22,55 +22,30 @@ class SelectData extends React.Component {
     }
   };
 
-  // handleBack = () => {
-  //   if (this.props.state.activeStep > 0) {
-  //     this.props.handler({
-  //       name: 'activeStep',
-  //       value: this.props.state.activeStep - 1,
-  //     })
-  //   }
-  // };
-
-  handleReset = () => {
-    this.props.handler({
-      name: 'activeStep',
-      value: 0
-    })
+  handlePrevious = () => {
+      this.props.handler({
+        name: 'activeStep',
+        value: 1,
+      })
+      this.props.handler({name: 'all', value: false})
+      this.props.handler({name: 'accounts', value: false})
+      this.props.handler({name: 'contacts', value: false})
+      this.props.handler({name: 'products', value: false})
+      this.props.handler({name: 'taxes', value: false})
+      this.props.handler({name: 'departments', value: false})
+      this.props.handler({name: 'projects', value: false})
+      this.props.handler({name: 'warehouses', value: false})
+      this.props.handler({name: 'fixedAssets', value: false})
+      this.props.handler({name: 'accountBeginningBalances', value: false})
+      this.props.handler({name: 'receivableBeginningBalances', value: false})
+      this.props.handler({name: 'payableBeginningBalances', value: false})
+      this.props.handler({name: 'salesPrepaymentBeginningBalances', value: false})
+      this.props.handler({name: 'purchasesPrepaymentBeginningBalances', value: false})
+      this.props.handler({name: 'inventoryBeginningBalances', value: false})
+      // empty form
+      this.props.handler({name: 'destSlug', value: null})
+      this.props.handler({name: 'originSlug', value: null})
   };
-
-  // handleStepButton = classes => {
-  //   if (this.props.state.activeStep===0) {
-  //     return (
-  //       <Button
-  //         variant="contained"
-  //         color="primary"
-  //         onClick={this.handleNext} >Lanjutkan
-  //       </Button>
-  //     )
-  //   } else if (this.props.state.activeStep===this.steps.length) {
-  //     return (
-  //       <Button
-  //         variant="contained"
-  //         onClick={this.handleReset} >Reset
-  //       </Button>
-  //     )
-  //   } else {
-  //     return (
-  //       <div>
-  //         <Button
-  //           variant="contained"
-  //           onClick={this.handleBack}
-  //           className={classes.backButton} >Kembali
-  //         </Button>
-  //         <Button
-  //           variant="contained"
-  //           color="primary"
-  //           onClick={this.handleNext} >{this.props.state.activeStep === this.props.steps.length - 1 ? 'Proses' : 'Lanjutkan'}
-  //         </Button>
-  //       </div>
-  //     )
-  //   }
-  // };
 
   handleCheckboxChange = name => event => {
     //Data - data
@@ -95,6 +70,12 @@ class SelectData extends React.Component {
           this.props.handler({name: 'accountCountAll', value: res.data.count})
           console.log(res.data.count)
         })
+        .catch(err => {
+          console.log(err.response)
+        })
+        .catch(err => {
+          console.log(err.response)
+        })
       } else {
         this.props.handler({name: 'accounts',value: false})
         this.props.handler({name: 'accountCountAll', value: 0})
@@ -114,6 +95,9 @@ class SelectData extends React.Component {
           this.props.handler({name: 'contactCountAll', value: res.data.count})
           console.log(res.data.count)
         })
+        .catch(err => {
+          console.log(err.response)
+        })
       } else {
         this.props.handler({name: 'contacts',value: false})
         this.props.handler({name: 'contactCountAll', value: 0})
@@ -131,6 +115,9 @@ class SelectData extends React.Component {
         .then(res => {
           this.props.handler({name: 'productCountAll', value: res.data.count})
           console.log(res.data.count)
+        })
+        .catch(err => {
+          console.log(err.response)
         })
       } else {
         this.props.handler({name: 'products',value: false})
@@ -150,6 +137,9 @@ class SelectData extends React.Component {
           this.props.handler({name: 'taxesCountAll', value: res.data.count})
           console.log(res.data.count)
         })
+        .catch(err => {
+          console.log(err.response)
+        })
       } else {
         this.props.handler({name: 'taxes',value: false})
         this.props.handler({name: 'taxesCountAll', value: 0})
@@ -167,6 +157,9 @@ class SelectData extends React.Component {
         .then(res => {
           this.props.handler({name: 'departmentCountAll', value: res.data.count})
           console.log(res.data.count)
+        })
+        .catch(err => {
+          console.log(err.response)
         })
       } else {
         this.props.handler({name: 'departments',value: false})
@@ -186,6 +179,9 @@ class SelectData extends React.Component {
           this.props.handler({name: 'projectCountAll', value: res.data.count})
           console.log(res.data.count)
         })
+        .catch(err => {
+          console.log(err.response)
+        })
       } else {
         this.props.handler({name: 'projects',value: false})
         this.props.handler({name: 'projectCountAll', value: 0})
@@ -204,6 +200,9 @@ class SelectData extends React.Component {
           this.props.handler({name: 'warehouseCountAll', value: res.data.count})
           console.log(res.data.count)
         })
+        .catch(err => {
+          console.log(err.response)
+        })
       } else {
         this.props.handler({name: 'warehouses',value: false})
         this.props.handler({name: 'warehouseCountAll', value: 0})
@@ -221,6 +220,9 @@ class SelectData extends React.Component {
         .then(res => {
           this.props.handler({name: 'fixedAssetCountAll', value: res.data.count})
           console.log(res.data.count)
+        })
+        .catch(err => {
+          console.log(err.response)
         })
       } else {
         this.props.handler({name: 'fixedAssets',value: false})
@@ -241,6 +243,9 @@ class SelectData extends React.Component {
           this.props.handler({name: 'accountBeginningBalanceCountAll', value: res.data.count})
           console.log(res.data.count)
         })
+        .catch(err => {
+          console.log(err.response)
+        })
       } else {
         this.props.handler({name: 'accountBeginningBalances',value: false})
         this.props.handler({name: 'accountCountAll', value: 0})
@@ -258,6 +263,9 @@ class SelectData extends React.Component {
         .then(res => {
           this.props.handler({name: 'receivableBeginningBalanceCountAll', value: res.data.count})
           console.log(res.data.count)
+        })
+        .catch(err => {
+          console.log(err.response)
         })
       } else {
         this.props.handler({name: 'receivableBeginningBalances',value: false})
@@ -277,6 +285,9 @@ class SelectData extends React.Component {
           this.props.handler({name: 'payableBeginningBalanceCountAll', value: res.data.count})
           console.log(res.data.count)
         })
+        .catch(err => {
+          console.log(err.response)
+        })
       } else {
         this.props.handler({name: 'payableBeginningBalances',value: false})
         this.props.handler({name: 'payableBeginningBalanceCountAll', value: 0})
@@ -294,6 +305,9 @@ class SelectData extends React.Component {
         .then(res => {
           this.props.handler({name: 'salesPrepaymentBeginningBalancesCountAll', value: res.data.count})
           console.log(res.data.count)
+        })
+        .catch(err => {
+          console.log(err.response)
         })
       } else {
         this.props.handler({name: 'salesPrepaymentBeginningBalances',value: false})
@@ -313,6 +327,9 @@ class SelectData extends React.Component {
           this.props.handler({name: 'purchasesPrepaymentBeginningBalancesCountAll', value: res.data.count})
           console.log(res.data.count)
         })
+        .catch(err => {
+          console.log(err.response)
+        })
       } else {
         this.props.handler({name: 'purchasesPrepaymentBeginningBalances',value: false})
         this.props.handler({name: 'purchasesPrepaymentBeginningBalancesCountAll', value: 0})
@@ -330,6 +347,9 @@ class SelectData extends React.Component {
         .then(res => {
           this.props.handler({name: 'inventoryBeginningBalanceCountAll', value: res.data.count})
           console.log(res.data.count)
+        })
+        .catch(err => {
+          console.log(err.response)
         })
       } else {
         this.props.handler({name: 'inventoryBeginningBalances',value: false})
@@ -504,7 +524,7 @@ class SelectData extends React.Component {
           </FormGroup>
         </FormControl>
          <div style={{ width: '100%', textAlign: 'right' }}>
-          <Button onClick={this.handleBack} variant="contained" color='default' style={{margin: '10px 10px 0 0'}}>
+          <Button onClick={this.handlePrevious} variant="contained" color='default' style={{margin: '10px 10px 0 0'}}>
             Kembali
           </Button>
           <Button onClick={this.handleNext} variant="contained" color='primary' style={{margin: '10px 0 0 0'}}>

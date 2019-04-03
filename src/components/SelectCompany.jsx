@@ -163,7 +163,10 @@ class SelectCompany extends React.Component {
 
   handlePrevious = () => {
     this.props.handler({name: 'activeStep', value: 0});
-    this.props.handler({'name': 'loading', 'value': false})
+    this.props.handler({name: 'email', value: ''});
+    this.props.handler({name: 'password', value: ''});
+    this.props.handler({name: 'accessToken', value: ''});
+    this.props.handler({name: 'refreshToken', value: ''});
   }
 
   handleNext = () => {
@@ -289,7 +292,7 @@ class SelectCompany extends React.Component {
 
   render() {
     const { destType } = this.props.state
-    // console.log(this.props.state.destSlug)
+    console.log(this.props.state.destSlug)
     return (
       <div>
         <Typography style={{ fontSize: 20 }} gutterBottom variant="h5" component="h5">
