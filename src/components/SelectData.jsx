@@ -134,7 +134,7 @@ class SelectData extends React.Component {
           }
         })
         .then(res => {
-          this.props.handler({name: 'taxesCountAll', value: res.data.count})
+          this.props.handler({name: 'taxeCountAll', value: res.data.count})
           console.log(res.data.count)
         })
         .catch(err => {
@@ -142,7 +142,7 @@ class SelectData extends React.Component {
         })
       } else {
         this.props.handler({name: 'taxes',value: false})
-        this.props.handler({name: 'taxesCountAll', value: 0})
+        this.props.handler({name: 'taxeCountAll', value: 0})
       }
     }
     // Departments

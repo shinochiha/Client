@@ -277,7 +277,7 @@ class SelectCompany extends React.Component {
       })
       .then(res => {
         this.props.handler({name: 'originSlug', value:res.data.file })
-        console.log(res.data.file)
+        // console.log(res.data.file)
         this.setState({
           loading: false
         })
@@ -292,7 +292,7 @@ class SelectCompany extends React.Component {
 
   render() {
     const { destType } = this.props.state
-    console.log(this.props.state.destSlug)
+    // console.log(this.props.state.destSlug)
     return (
       <div>
         <Typography style={{ fontSize: 20 }} gutterBottom variant="h5" component="h5">
