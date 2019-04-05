@@ -119,7 +119,7 @@ class Status extends React.Component {
         console.log(err.response.data.response.error.message);
       });
     }
-  }
+  } 
 
     // Contacts
     if (this.props.state.contacts === true) {
@@ -153,7 +153,7 @@ class Status extends React.Component {
     }
   }
 
-  // Products
+   // Products
   if (this.props.state.products === true) {
     for (let i = 0; i < this.props.state.productCountAll; i++) {
       axios.post('/products', {
@@ -595,13 +595,8 @@ class Status extends React.Component {
               <p><b>Failed:</b> <a href="https://www.npmjs.com/package/export-to-csv">{accountCountFailed}</a></p>
             </div> : ''
           }
-          {
-          this.state.loadingAccount === accountCountAll ?
-            <LinearProgress color="secondary" variant="buffer" value={account} valueBuffer={this.state.loadingAccount} />
-            :
-            <LinearProgress variant="buffer" value={account} valueBuffer={this.state.loadingAccount} />
-          }
-            <br/>
+          <LinearProgress variant="buffer" value={account} valueBuffer={this.state.loadingAccount} />
+          <br/>
           </div>  
           : ''
         }
@@ -617,12 +612,7 @@ class Status extends React.Component {
               <p><b>Failed:</b> <a href="https://www.npmjs.com/package/export-to-csv">{contactCountFailed}</a></p>
             </div> : ''
           }
-          {
-          this.state.loadingContact === contactCountAll ?
-            <LinearProgress color="secondary" variant="buffer" value={contact} valueBuffer={this.state.loadingContact} />
-            :
-            <LinearProgress variant="buffer" value={contact} valueBuffer={this.state.loadingContact} />
-          }
+          <LinearProgress variant="buffer" value={contact} valueBuffer={this.state.loadingContact} />
           <br/>
         </div>
         : ''
@@ -639,12 +629,7 @@ class Status extends React.Component {
               <p><b>Failed:</b> <a href="https://www.npmjs.com/package/export-to-csv">{productCountFailed}</a></p>
             </div> : ''
           }
-          {
-          this.state.loadingProduct === productCountAll ?
-            <LinearProgress color="secondary" variant="buffer" value={product} valueBuffer={this.state.loadingProduct} />
-            :
-            <LinearProgress variant="buffer" value={product} valueBuffer={this.state.loadingProduct} />
-          }
+          <LinearProgress variant="buffer" value={product} valueBuffer={this.state.loadingProduct} />
           <br/>
         </div>
         : ''
@@ -661,12 +646,7 @@ class Status extends React.Component {
               <p><b>Failed:</b> <a href="https://www.npmjs.com/package/export-to-csv">{taxeCountFailed}</a></p>
             </div> : ''
           }
-          {
-          this.state.loadingTaxes === taxeCountAll ?
-            <LinearProgress color="secondary" variant="buffer" value={tax} valueBuffer={this.state.loadingTaxes} />
-            :
-            <LinearProgress variant="buffer" value={tax} valueBuffer={this.state.loadingTaxes} />
-          }
+          <LinearProgress variant="buffer" value={tax} valueBuffer={this.state.loadingTaxes} />
           <br/>
         </div>
         : ''
@@ -683,12 +663,7 @@ class Status extends React.Component {
               <p><b>Failed:</b> <a href="https://www.npmjs.com/package/export-to-csv">{departmentCountFailed}</a></p>
             </div> : ''
           }
-          {
-          this.state.loadingDepartment === departmentCountAll ?
-            <LinearProgress color="secondary" variant="buffer" value={department} valueBuffer={this.state.loadingDepartment} />
-            :
-            <LinearProgress variant="buffer" value={department} valueBuffer={this.state.loadingDepartment} />
-          }
+          <LinearProgress variant="buffer" value={department} valueBuffer={this.state.loadingDepartment} />
           <br/>
         </div>
         : ''
@@ -705,12 +680,7 @@ class Status extends React.Component {
               <p><b>Failed:</b> <a href="https://www.npmjs.com/package/export-to-csv">{projectCountFailed}</a></p>
             </div> : ''
           }
-          {
-          this.state.loadingProject === projectCountAll ?
-            <LinearProgress color="secondary" variant="buffer" value={project} valueBuffer={this.state.loadingProject} />
-            :
-            <LinearProgress variant="buffer" value={project} valueBuffer={this.state.loadingProject} />
-          }
+          <LinearProgress variant="buffer" value={project} valueBuffer={this.state.loadingProject} />
           <br/>
         </div>
         : ''
@@ -727,12 +697,7 @@ class Status extends React.Component {
               <p><b>Failed:</b> <a href="https://www.npmjs.com/package/export-to-csv">{warehouseCountFailed}</a></p>
             </div> : ''
           }
-          {
-          this.state.loadingWarehouse === warehouseCountAll ?
-            <LinearProgress color="secondary" variant="buffer" value={warehouse} valueBuffer={this.state.loadingWarehouse} />
-            :
-            <LinearProgress variant="buffer" value={warehouse} valueBuffer={this.state.loadingWarehouse} />
-          }
+          <LinearProgress variant="buffer" value={warehouse} valueBuffer={this.state.loadingWarehouse} />
           <br/>
         </div>
         : ''
@@ -749,12 +714,7 @@ class Status extends React.Component {
               <p><b>Failed:</b> <a href="https://www.npmjs.com/package/export-to-csv">{fixedAssetCountFailed}</a></p>
             </div> : ''
           }
-          {
-          this.state.loadingFixedAsset === fixedAssetCountAll ?
-            <LinearProgress color="secondary" variant="buffer" value={fixedAsset} valueBuffer={this.state.loadingFixedAsset} />
-            :
-            <LinearProgress variant="buffer" value={fixedAsset} valueBuffer={this.state.loadingFixedAsset} />
-          }
+          <LinearProgress variant="buffer" value={fixedAsset} valueBuffer={this.state.loadingFixedAsset} />
           <br/>
         </div>
         : ''
@@ -778,12 +738,7 @@ class Status extends React.Component {
               <p><b>Failed:</b> <a href="https://www.npmjs.com/package/export-to-csv">{accountBeginningBalanceCountFailed}</a></p>
             </div> : ''
           }
-          {
-          this.state.loadingAccountBalance === accountBeginningBalanceCountAll ?
-            <LinearProgress color="secondary" variant="buffer" value={accountBalance} valueBuffer={this.state.loadingAccountBalance} />
-            :
-            <LinearProgress variant="buffer" value={accountBalance} valueBuffer={this.state.loadingAccountBalance} />
-          }
+          <LinearProgress variant="buffer" value={accountBalance} valueBuffer={this.state.loadingAccountBalance} />
           <br/>
         </div>
         : ''
@@ -800,12 +755,7 @@ class Status extends React.Component {
               <p><b>Failed:</b> <a href="https://www.npmjs.com/package/export-to-csv">{receivableBeginningBalanceCountFailed}</a></p>
             </div> : ''
           }
-          {
-          this.state.loadingReceivableBalance === receivableBeginningBalanceCountAll ?
-            <LinearProgress color="secondary" variant="buffer" value={receivableBalance} valueBuffer={this.state.loadingReceivableBalance} />
-            :
-            <LinearProgress variant="buffer" value={receivableBalance} valueBuffer={this.state.loadingReceivableBalance} />
-          }
+          <LinearProgress variant="buffer" value={receivableBalance} valueBuffer={this.state.loadingReceivableBalance} />
           <br/>
         </div>
         : ''
@@ -822,12 +772,7 @@ class Status extends React.Component {
               <p><b>Failed:</b> <a href="https://www.npmjs.com/package/export-to-csv">{payableBeginningBalanceCountFailed}</a></p>
             </div> : ''
           }
-          {
-          this.state.loadingPayableBalance === payableBeginningBalanceCountAll ?
-            <LinearProgress color="secondary" variant="buffer" value={payableBalance} valueBuffer={this.state.loadingPayableBalance} />
-            :
-            <LinearProgress variant="buffer" value={payableBalance} valueBuffer={this.state.loadingPayableBalance} />
-          }
+          <LinearProgress variant="buffer" value={payableBalance} valueBuffer={this.state.loadingPayableBalance} />
           <br/>
         </div>
         : ''
@@ -836,20 +781,15 @@ class Status extends React.Component {
         {
           salesPrepaymentBeginningBalances === true ?
         <div>
-          <p><b>Penjualan:</b> {this.state.loadingSalesBalance} / {this.props.state.salesPrepaymentBeginningBalanceCountAll}</p>
+          <p><b>Penjualan:</b> {this.state.loadingSalesBalance} / {salesPrepaymentBeginningBalanceCountAll}</p>
           {
-            this.state.loadingSalesBalance === this.props.state.salesPrepaymentBeginningBalanceCountAll ?
+            this.state.loadingSalesBalance === salesPrepaymentBeginningBalanceCountAll ?
             <div>
               <p><b>Success:</b> {salesPrepaymentBeginningBalanceCountSynced}</p>
               <p><b>Failed:</b> <a href="https://www.npmjs.com/package/export-to-csv">{salesPrepaymentBeginningBalanceCountFailed}</a></p>
             </div> : ''
           }
-          {
-          this.state.loadingSalesBalance === salesPrepaymentBeginningBalanceCountAll ?
-            <LinearProgress color="secondary" variant="buffer" value={salesBalance} valueBuffer={this.state.loadingSalesBalance} />
-            :
-            <LinearProgress variant="buffer" value={salesBalance} valueBuffer={this.state.loadingSalesBalance} />
-          }
+          <LinearProgress variant="buffer" value={salesBalance} valueBuffer={this.state.loadingSalesBalance} />
           <br/>
         </div>
         : ''
@@ -866,12 +806,7 @@ class Status extends React.Component {
               <p><b>Failed:</b> <a href="https://www.npmjs.com/package/export-to-csv">{purchasesPrepaymentBeginningBalanceCountFailed}</a></p>
             </div> : ''
           }
-          {
-          this.state.loadingPurchasesBalance === purchasesPrepaymentBeginningBalanceCountAll ?
-            <LinearProgress color="secondary" variant="buffer" value={purchasesBalance} valueBuffer={this.state.loadingPurchasesBalance} />
-            :
-            <LinearProgress variant="buffer" value={purchasesBalance} valueBuffer={this.state.loadingPurchasesBalance} />
-          }
+          <LinearProgress variant="buffer" value={purchasesBalance} valueBuffer={this.state.loadingPurchasesBalance} />
           <br/>
         </div>
         : ''
@@ -888,12 +823,7 @@ class Status extends React.Component {
               <p><b>Failed:</b> <a href="https://www.npmjs.com/package/export-to-csv">{inventoryBeginningBalanceCountFailed}</a></p>
             </div> : ''
           }
-          {
-          this.state.loadingInventoryBalance === inventoryBeginningBalanceCountAll ?
-            <LinearProgress color="secondary" variant="buffer" value={inventoryBalance} valueBuffer={this.state.loadingInventoryBalance} />
-            :
-            <LinearProgress variant="buffer" value={inventoryBalance} valueBuffer={this.state.loadingInventoryBalance} />
-          }
+          <LinearProgress variant="buffer" value={inventoryBalance} valueBuffer={this.state.loadingInventoryBalance} />
           <br/>
         </div>
         : ''

@@ -303,7 +303,7 @@ class SelectData extends React.Component {
           }
         })
         .then(res => {
-          this.props.handler({name: 'salesPrepaymentBeginningBalancesCountAll', value: res.data.count})
+          this.props.handler({name: 'salesPrepaymentBeginningBalanceCountAll', value: res.data.count})
           console.log(res.data.count)
         })
         .catch(err => {
@@ -311,7 +311,7 @@ class SelectData extends React.Component {
         })
       } else {
         this.props.handler({name: 'salesPrepaymentBeginningBalances',value: false})
-        this.props.handler({name: 'salesPrepaymentBeginningBalancesCountAll', value: 0})
+        this.props.handler({name: 'salesPrepaymentBeginningBalanceCountAll', value: 0})
       }
     }
     // Purchases
@@ -324,7 +324,7 @@ class SelectData extends React.Component {
           }
         })
         .then(res => {
-          this.props.handler({name: 'purchasesPrepaymentBeginningBalancesCountAll', value: res.data.count})
+          this.props.handler({name: 'purchasesPrepaymentBeginningBalanceCountAll', value: res.data.count})
           console.log(res.data.count)
         })
         .catch(err => {
@@ -332,7 +332,7 @@ class SelectData extends React.Component {
         })
       } else {
         this.props.handler({name: 'purchasesPrepaymentBeginningBalances',value: false})
-        this.props.handler({name: 'purchasesPrepaymentBeginningBalancesCountAll', value: 0})
+        this.props.handler({name: 'purchasesPrepaymentBeginningBalanceCountAll', value: 0})
       }
     }
     // Inventory
