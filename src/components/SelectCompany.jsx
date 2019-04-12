@@ -396,6 +396,7 @@ class SelectCompany extends React.Component {
           error={this.state.originSlug.isError}
           name="originSlug"
           type="file"
+          accept=".gdb"
           InputLabelProps={{ shrink: true }}
           label="Select Company"
           variant="outlined"
@@ -404,8 +405,14 @@ class SelectCompany extends React.Component {
           fullWidth
         />
         {this.handleValidationMessage('originSlug')}
-
-        <Button variant="contained" color="default" onClick={this.handleUpload}>
+        <i style={{color: 'red', fontSize:'15px'}}>*Select File .gdb</i>
+        <br />
+        <br />
+        <Button 
+          variant="contained"
+          color="default"
+          onClick={this.handleUpload} 
+          >
           Upload &nbsp;
           <CloudUploadIcon /> &nbsp;&nbsp;
           <ClipLoader

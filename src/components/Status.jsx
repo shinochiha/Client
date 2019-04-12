@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Button from '@material-ui/core/Button';
+import * as Promise from 'bluebird';
+// import { CSVLink, CSVDownload } from "react-csv";
 
 const styles = {
   root: {
@@ -28,6 +30,7 @@ class Status extends React.Component {
     loadingSalesBalance: 0,
     loadingPurchasesBalance: 0,
     loadingInventoryBalance: 0,
+    fethContacts: false,
 };
 
   handlePrevious = () => {
@@ -84,48 +87,16 @@ class Status extends React.Component {
       this.props.handler({name: 'inventoryBeginningBalances', value: false})
   };
 
-  handleNext = () => {
-  let skip = this.state.skip + 1
-  this.setState({
-    skip: skip
-  })
-    // Accounts
-   if (this.props.state.accounts === true) {
-    for (let i = 0; i < this.props.state.accountCountAll; i++) {
-      axios.post('/accounts', {
-        skip: i,
-        token: this.props.state.accessToken,
-          origin: {
-              database: this.props.state.originSlug
-          },
-          destination: {
-              type: this.props.state.destType,
-              url: this.props.state.destUrl,
-              slug: this.props.state.destSlug
-          }
-      })
-      .then(res => {
-      this.setState({
-        loadingAccount: this.state.loadingAccount + 1
-      })
-        this.props.handler({'name':'accountCountSynced', 'value': this.props.state.accountCountSynced + 1})
-        console.log(res.data)
-      })
-      .catch(err => {
-      this.setState({
-        loadingAccount: this.state.loadingAccount + 1
-      })
-        this.props.handler({'name':'accountCountFailed', 'value': this.props.state.accountCountFailed + 1})
-        console.log(err.response.data.response.error.message);
-      });
-    }
-  } 
-
-    // Contacts
-    if (this.props.state.contacts === true) {
-    for (let i = 0; i < this.props.state.contactCountAll; i++) {
-      axios.post('/contacts', {
-        skip: i,
+  handlefethContact = () => {
+      if (this.props.state.contacts === true) {
+      let arr = [];
+      let start = 0;
+      while( start < this.props.state.contactCountAll) {
+        arr.push(start++)
+      }
+      Promise.mapSeries(arr, (body) => {
+        return axios.post('/contacts', {
+        skip: body,
         token: this.props.state.accessToken,
           origin: {
               database: this.props.state.originSlug
@@ -150,14 +121,102 @@ class Status extends React.Component {
         this.props.handler({'name':'contactCountFailed', 'value': this.props.state.contactCountFailed + 1})
         console.log(err.response.data.response.error.message);
       });
-    }
+    })
   }
+}
 
-   // Products
+  handleNext = () => {
+  let skip = this.state.skip + 1
+  this.setState({
+    skip: skip
+  })
+   // Accounts
+   if (this.props.state.accounts === true) {
+    let arr = [];
+    let start = 0;
+    while( start < this.props.state.accountCountAll) {
+      arr.push(start++)
+    }
+    Promise.mapSeries(arr, (body) => {
+      return axios.post('/accounts', {
+        skip: body,
+        token: this.props.state.accessToken,
+          origin: {
+              database: this.props.state.originSlug
+          },
+          destination: {
+              type: this.props.state.destType,
+              url: this.props.state.destUrl,
+              slug: this.props.state.destSlug
+          }
+      })
+      .then(res => {
+      this.setState({
+        loadingAccount: this.state.loadingAccount + 1
+      })
+        this.props.handler({'name':'accountCountSynced', 'value': this.props.state.accountCountSynced + 1})
+        console.log(res.data)
+      })
+      .catch(err => {
+      this.setState({
+        loadingAccount: this.state.loadingAccount + 1
+      })
+        this.props.handler({'name':'accountCountFailed', 'value': this.props.state.accountCountFailed + 1})
+        console.log(err.response.data.response.error.message);
+      });
+    })
+    .then(res => {
+          this.handlefethContact()
+      })
+  } 
+   
+    // Contacts
+ /**   if (this.props.state.contacts === true) {
+      let arr = [];
+      let start = 0;
+      while( start < this.props.state.contactCountAll) {
+        arr.push(start++)
+      }
+      Promise.mapSeries(arr, (body) => {
+        return axios.post('/contacts', {
+        skip: body,
+        token: this.props.state.accessToken,
+          origin: {
+              database: this.props.state.originSlug
+          },
+          destination: {
+              type: this.props.state.destType,
+              url: this.props.state.destUrl,
+              slug: this.props.state.destSlug
+          }
+      })
+      .then(res => {
+      this.setState({
+        loadingContact: this.state.loadingContact + 1
+      })
+        this.props.handler({'name':'contactCountSynced', 'value': this.props.state.contactCountSynced + 1})
+        console.log(res.data)
+      })
+      .catch(err => {
+      this.setState({
+        loadingContact: this.state.loadingContact + 1
+      })
+        this.props.handler({'name':'contactCountFailed', 'value': this.props.state.contactCountFailed + 1})
+        console.log(err.response.data.response.error.message);
+      });
+    })
+  } **/
+    
+  // Products
   if (this.props.state.products === true) {
-    for (let i = 0; i < this.props.state.productCountAll; i++) {
-      axios.post('/products', {
-        skip: i,
+    let arr = [];
+    let start = 0;
+    while( start < this.props.state.productCountAll ) {
+      arr.push(start++)
+    }
+    Promise.mapSeries(arr, (body) => {
+      return axios.post('/products', {
+        skip: body,
         token: this.props.state.accessToken,
           origin: {
               database: this.props.state.originSlug
@@ -182,14 +241,19 @@ class Status extends React.Component {
         this.props.handler({'name':'productCountFailed', 'value': this.props.state.productCountFailed + 1})
         console.log(err.response.data.response.error.message);
       });
-    }
+    })
   }
 
   // Taxes
   if (this.props.state.taxes === true) {
-    for (let i = 0; i < this.props.state.taxeCountAll; i++) {
-      axios.post('/taxes', {
-        skip: i,
+    let arr = [];
+    let start = 0;
+    while( start < this.props.state.taxeCountAll) {
+      arr.push(start++)
+    }
+    Promise.mapSeries(arr ,(body) => {
+      return axios.post('/taxes', {
+        skip: body,
         token: this.props.state.accessToken,
           origin: {
               database: this.props.state.originSlug
@@ -214,14 +278,19 @@ class Status extends React.Component {
         this.props.handler({'name':'taxeCountFailed', 'value': this.props.state.taxeCountFailed + 1})
         console.log(err.response.data.response.error.message);
       });
-    }
+    })
   }
 
   //Departments
   if (this.props.state.departments === true) {
-    for (let i = 0; i < this.props.state.departmentCountAll; i++) {
-      axios.post('/departments', {
-        skip: i,
+    let arr = [];
+    let start = 0;
+    while( start < this.props.state.departmentCountAll ) {
+      arr.push(start++)
+    }
+    Promise.mapSeries(arr, (body) => {
+      return axios.post('/departments', {
+        skip: body,
         token: this.props.state.accessToken,
           origin: {
               database: this.props.state.originSlug
@@ -246,14 +315,19 @@ class Status extends React.Component {
         this.props.handler({'name':'departmentCountFailed', 'value': this.props.state.departmentCountFailed + 1})
         console.log(err.response.data.response.error.message);
       });
-    }
+    })
   }
 
   // Projects
-    if (this.props.state.projects === true) {
-    for (let i = 0; i < this.props.state.projectCountAll; i++) {
-      axios.post('/projects', {
-        skip: i,
+  if (this.props.state.projects === true) {
+    let arr = [];
+    let start = 0;
+    while( start < this.props.state.projectCountAll ) {
+      arr.push(start++)
+    }
+    Promise.mapSeries(arr, (body) => {
+      return axios.post('/projects', {
+        skip: body,
         token: this.props.state.accessToken,
           origin: {
               database: this.props.state.originSlug
@@ -278,14 +352,19 @@ class Status extends React.Component {
         this.props.handler({'name':'projectCountFailed', 'value': this.props.state.projectCountFailed + 1})
         console.log(err.response.data.response.error.message);
       });
-    }
+    })
   }
 
   // Warehouses
   if (this.props.state.warehouses === true) {
-    for (let i = 0; i < this.props.state.warehouseCountAll; i++) {
-      axios.post('/warehouses', {
-        skip: i,
+    let arr = [];
+    let start = 0;
+    while( start < this.props.state.warehouseCountAll ) {
+      arr.push(start++)
+    }
+    Promise.mapSeries(arr, (body) => {
+      return axios.post('/warehouses', {
+        skip: body,
         token: this.props.state.accessToken,
           origin: {
               database: this.props.state.originSlug
@@ -310,14 +389,19 @@ class Status extends React.Component {
         this.props.handler({'name':'warehouseCountFailed', 'value': this.props.state.warehouseCountFailed + 1})
         console.log(err.response.data.response.error.message);
       });
-    }
+    })
   }
 
   // fixedAssets
   if (this.props.state.fixedAssets === true) {
-    for (let i = 0; i < this.props.state.fixedAssetCountAll; i++) {
-      axios.post('/fixedAssets', {
-        skip: i,
+    let arr = [];
+    let start = 0;
+    while( start < this.props.state.fixedAssetCountAll ) {
+      arr.push(start++)
+    }
+    Promise.mapSeries(arr, (body) => {
+      return axios.post('/fixed_assets', {
+        skip: body,
         token: this.props.state.accessToken,
           origin: {
               database: this.props.state.originSlug
@@ -342,14 +426,19 @@ class Status extends React.Component {
         this.props.handler({'name':'fixedAssetCountFailed', 'value': this.props.state.fixedAssetCountFailed + 1})
         console.log(err.response.data.response.error.message);
       });
-    }
+    })
   }
 
   // AccountBeginningBalances
   if (this.props.state.accountBeginningBalances === true) {
-    for (let i = 0; i < this.props.state.accountBeginningBalanceCountAll; i++) {
-      axios.post('/account_beginning_balances', {
-        skip: i,
+    let arr = [];
+    let start = 0;
+    while( start < this.props.state.accountBeginningBalanceCountAll ) {
+      arr.push(start++)
+    }
+    Promise.mapSeries(arr, (body) => {
+      return axios.post('/account_beginning_balances', {
+        skip: body,
         token: this.props.state.accessToken,
           origin: {
               database: this.props.state.originSlug
@@ -374,14 +463,19 @@ class Status extends React.Component {
         this.props.handler({'name':'accountBeginningBalanceCountFailed', 'value': this.props.state.accountBeginningBalanceCountFailed + 1})
         console.log(err.response.data.response.error.message);
       });
-    }
+    })
   }
 
   // ReceivableBeginningBalances
   if (this.props.state.receivableBeginningBalances === true) {
-    for (let i = 0; i < this.props.state.receivableBeginningBalanceCountAll; i++) {
-      axios.post('/receivable_beginning_balances', {
-        skip: i,
+    let arr = [];
+    let start = 0;
+    while( start < this.props.state.receivableBeginningBalanceCountAll ) {
+      arr.push(start++)
+    }
+    Promise.mapSeries(arr, (body) => {
+      return axios.post('/receivable_beginning_balances', {
+        skip: body,
         token: this.props.state.accessToken,
           origin: {
               database: this.props.state.originSlug
@@ -406,14 +500,19 @@ class Status extends React.Component {
         this.props.handler({'name':'receivableBeginningBalanceCountFailed', 'value': this.props.state.receivableBeginningBalanceCountFailed + 1})
         console.log(err.response.data.response.error.message);
       });
-    }
+    })
   }
 
   // PayableBeginningBalance
   if (this.props.state.payableBeginningBalances === true) {
-    for (let i = 0; i < this.props.state.payableBeginningBalanceCountAll; i++) {
-      axios.post('/payable_beginning_balances', {
-        skip: i,
+    let arr = [];
+    let start = 0;
+    while( start < this.props.state.payableBeginningBalanceCountAll ) {
+      arr.push(start++)
+    }
+    Promise.mapSeries(arr, (body) => {
+      return axios.post('/payable_beginning_balances', {
+        skip: body,
         token: this.props.state.accessToken,
           origin: {
               database: this.props.state.originSlug
@@ -438,14 +537,19 @@ class Status extends React.Component {
         this.props.handler({'name':'payableBeginningBalanceCountFailed', 'value': this.props.state.payableBeginningBalanceCountFailed + 1})
         console.log(err.response.data.response.error.message);
       });
-    }
+    })
   }
 
   // SalesPrepaymentBeginningBalances
   if (this.props.state.salesPrepaymentBeginningBalances === true) {
-    for (let i = 0; i < this.props.state.salesPrepaymentBeginningBalanceCountAll; i++) {
-      axios.post('/sales_prepayment_beginning_balances', {
-        skip: i,
+    let arr = [];
+    let start = 0;
+    while( start < this.props.state.salesPrepaymentBeginningBalanceCountAll ) {
+      arr.push(start++)
+    }
+    Promise.mapSeries(arr, (body) => {
+      return axios.post('/sales_prepayment_beginning_balances', {
+        skip: body,
         token: this.props.state.accessToken,
           origin: {
               database: this.props.state.originSlug
@@ -470,14 +574,19 @@ class Status extends React.Component {
         this.props.handler({'name':'salesPrepaymentBeginningBalanceCountFailed', 'value': this.props.state.salesPrepaymentBeginningBalanceCountFailed + 1})
         console.log(err.response.data.response.error.message);
       });
-    }
+    })
   }
 
   // PurchasesPrepaymentBeginningBalances
   if (this.props.state.purchasesPrepaymentBeginningBalances === true) {
-    for (let i = 0; i < this.props.state.purchasesPrepaymentBeginningBalanceCountAll; i++) {
-      axios.post('/purchases_prepayment_beginning_balances', {
-        skip: i,
+    let arr = [];
+    let start = 0;
+    while( start < this.props.state.purchasesPrepaymentBeginningBalanceCountAll ) {
+      arr.push(start++)
+    }
+    Promise.mapSeries(arr, (body) => {
+      return axios.post('/purchases_prepayment_beginning_balances', {
+        skip: body,
         token: this.props.state.accessToken,
           origin: {
               database: this.props.state.originSlug
@@ -502,14 +611,19 @@ class Status extends React.Component {
         this.props.handler({'name':'purchasesPrepaymentBeginningBalanceCountFailed', 'value': this.props.state.purchasesPrepaymentBeginningBalanceCountFailed + 1})
         console.log(err.response.data.response.error.message);
       });
-    }
+    })
   }
 
   // InventoryBeginningBalances
   if (this.props.state.inventoryBeginningBalances === true) {
-    for (let i = 0; i < this.props.state.inventoryBeginningBalanceCountAll; i++) {
-      axios.post('/inventory_beginning_balances', {
-        skip: i,
+    let arr = [];
+    let start = 0;
+    while( start < this.props.state.inventoryBeginningBalanceCountAll ) {
+      arr.push(start++)
+    }
+    Promise.mapSeries(arr, (body) => {
+      return axios.post('/inventory_beginning_balances', {
+        skip: body,
         token: this.props.state.accessToken,
           origin: {
               database: this.props.state.originSlug
@@ -534,7 +648,7 @@ class Status extends React.Component {
         this.props.handler({'name':'inventoryBeginningBalanceCountFailed', 'value': this.props.state.inventoryBeginningBalanceCountFailed + 1})
         console.log(err.response.data.response.error.message);
       });
-    }
+    })
   }
 };
 
